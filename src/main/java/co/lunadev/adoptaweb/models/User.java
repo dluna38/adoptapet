@@ -3,7 +3,10 @@ package co.lunadev.adoptaweb.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,30 +15,32 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Table(name = "Usuario")
+@Table(name = "User")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter @Setter
-@ToString
-public class Usuario implements UserDetails {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false)
-    private String nombre;
     @Column(nullable = false,length = 100,unique = true)
-    private String correo;
-
+    @Email
+    private String email;
     @Column(nullable = false)
     @Getter(AccessLevel.NONE)
     @JsonIgnore
-    private String contrasena;
+    @NotBlank
+    private String password;
+
+    @Column(nullable = false)
+    @ColumnDefault("0")
+    private boolean enable;
 
     @Enumerated(EnumType.STRING)
     private Rol role;
 
-    public Usuario(String correo) {
-        this.correo = correo;
+    public User(String email) {
+        this.email = email;
     }
 
     @Override
@@ -45,12 +50,12 @@ public class Usuario implements UserDetails {
 
     @Override
     public String getPassword() {
-        return contrasena;
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return correo;
+        return email;
     }
 
     @Override
@@ -70,9 +75,8 @@ public class Usuario implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return this.enable;
     }
-
 
     public enum Rol {
         ROLE_SUPER_ADMIN,

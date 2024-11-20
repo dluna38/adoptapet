@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class AppHttpException extends RuntimeException{
+public class AppHttpException extends RuntimeException{
     protected final HttpStatus statusCode;
     protected final transient  Map<String,Object> responseBody;
     protected final transient List<Map<String,Object>> extraContent;
@@ -21,6 +21,7 @@ public abstract class AppHttpException extends RuntimeException{
         this.responseBody.put("msg",message);
         this.responseBody.put("extra",this.extraContent);
     }
+
 
     protected ResponseEntity<Object> generateResponse(){
         return new ResponseEntity<>(responseBody,statusCode);

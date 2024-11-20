@@ -2,6 +2,7 @@ package co.lunadev.adoptaweb.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -9,7 +10,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class ControllersExceptionHandler {
@@ -24,30 +27,29 @@ public class ControllersExceptionHandler {
         return ex.generateResponse();
     }
     @ExceptionHandler(UnknownException.class)
-    public ResponseEntity<Object> unknownExceptionResponse(ResourceNotFoundException ex){
+    public ResponseEntity<Object> unknownExceptionResponse(UnknownException ex){
         return ex.generateResponse();
     }
-    @ExceptionHandler({ValidationException.class})
+    @ExceptionHandler(ValidationException.class)
     public ResponseEntity<Object> validationExceptionResponse(ValidationException ex){
-        System.out.println(ex.extraContent.get(0));
         return ex.generateResponse();
     }
-
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<Object> authenticationExceptionResponse(AuthenticationException ex){
-        return ResponseEntity.badRequest().body("No se pudo autenticar - revisar credenciales");
+        return new AppHttpException("No se pudo autenticar - revisar credenciales",HttpStatus.BAD_REQUEST).generateResponse();
     }
-
+    @ExceptionHandler(DisabledException.class)
+    public ResponseEntity<Object> disableExceptionResponse(DisabledException ex){
+        return new AppHttpException("Cuenta desactivada - contacte al administrador",HttpStatus.BAD_REQUEST).generateResponse();
+    }
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> methodArgumentNotValidExceptionResponse(MethodArgumentNotValidException ex){
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach( error -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
-        });
 
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        String errorsString = ex.getBindingResult().getAllErrors().stream()
+                .map(error-> ((FieldError) error).getField() +": "+error.getDefaultMessage())
+                .collect(Collectors.joining(", "));
+
+        return new AppHttpException(errorsString,HttpStatus.BAD_REQUEST).generateResponse();
     }
 
    /* @ExceptionHandler(SqlEx.class)

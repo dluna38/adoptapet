@@ -1,7 +1,7 @@
 package co.lunadev.adoptaweb.security;
 
 import co.lunadev.adoptaweb.exceptions.ResourceNotFoundException;
-import co.lunadev.adoptaweb.repositories.UsuarioRepository;
+import co.lunadev.adoptaweb.repositories.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,15 +14,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class AppSecurityConfig {
-    private final UsuarioRepository usuarioRepository;
+    private final UserRepository userRepository;
 
-    public AppSecurityConfig(UsuarioRepository usuarioRepository) {
-        this.usuarioRepository = usuarioRepository;
+    public AppSecurityConfig(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
-    @Bean
     public UserDetailsService userDetailsService(){
-        return username -> usuarioRepository.findUsuarioByCorreoIgnoreCase(username).orElseThrow(()-> new ResourceNotFoundException("usuario"));
+        return username -> userRepository.findUsuarioByEmailIgnoreCase(username).orElseThrow(()-> new ResourceNotFoundException("usuario"));
     }
 
     @Bean

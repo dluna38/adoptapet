@@ -1,5 +1,7 @@
 package co.lunadev.adoptaweb.security.jwt;
 
+import co.lunadev.adoptaweb.exceptions.ResourceNotFoundException;
+import co.lunadev.adoptaweb.repositories.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,13 +24,13 @@ import java.util.regex.Pattern;
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
-    private final UserDetailsService userDetailsService;
+    private final UserRepository userRepository;
     private static final Pattern authorizationPattern = Pattern.compile("^Bearer (?<token>[a-zA-Z0-9-._~+/]+=*)$",
             Pattern.CASE_INSENSITIVE);
 
-    public JwtAuthFilter(JwtService jwtService, UserDetailsService userDetailsService) {
+    public JwtAuthFilter(JwtService jwtService, UserRepository userRepository) {
         this.jwtService = jwtService;
-        this.userDetailsService = userDetailsService;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -46,7 +48,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
             if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 //get the user
-                UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
+                UserDetails userDetails = userRepository.findUsuarioByEmailIgnoreCase(userEmail).orElseThrow(() -> new ResourceNotFoundException("usuario"));
                 //fill the security context for the request
                 setSecurityContextWithUserDetails(request, userDetails);
             }
