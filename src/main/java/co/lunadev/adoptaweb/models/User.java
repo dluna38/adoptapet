@@ -36,6 +36,9 @@ public class User implements UserDetails {
     @ColumnDefault("0")
     private boolean enable;
 
+    @OneToOne(mappedBy = "usuario")
+    private Refugio refugio;
+
     @Enumerated(EnumType.STRING)
     private Rol role;
 
