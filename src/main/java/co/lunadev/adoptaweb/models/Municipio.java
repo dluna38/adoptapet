@@ -10,6 +10,7 @@ public class Municipio {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Short id;
     private String nombre;
+    private String codPostal;
     @ManyToOne
     private Departamento departamento;
 }

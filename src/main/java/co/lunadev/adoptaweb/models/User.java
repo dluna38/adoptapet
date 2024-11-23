@@ -35,6 +35,8 @@ public class User implements UserDetails {
     @Column(nullable = false)
     @ColumnDefault("0")
     private boolean enable;
+    @ColumnDefault("0")
+    private boolean changePassword;
 
     @OneToOne(mappedBy = "usuario")
     private Refugio refugio;
