@@ -38,4 +38,9 @@ out/
 .vscode/
 
 src/resources/db/
+src/resources/db
 logs
+src/resources/images/
+src/resources/templates/mail/
+src/resources/images
+src/resources/templates/mail

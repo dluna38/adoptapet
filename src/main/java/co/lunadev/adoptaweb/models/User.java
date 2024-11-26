@@ -38,7 +38,8 @@ public class User implements UserDetails {
     @ColumnDefault("0")
     private boolean changePassword;
 
-    @OneToOne(mappedBy = "usuario")
+    @OneToOne(mappedBy = "usuario",fetch = FetchType.LAZY)
+    @ToString.Exclude
     private Refugio refugio;
 
     @Enumerated(EnumType.STRING)

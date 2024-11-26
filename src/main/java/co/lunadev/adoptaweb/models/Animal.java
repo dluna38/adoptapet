@@ -1,5 +1,6 @@
 package co.lunadev.adoptaweb.models;
 
+import co.lunadev.adoptaweb.models.archivos.FotosAnimal;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.ColumnDefault;
