@@ -1,5 +1,7 @@
 package co.lunadev.adoptaweb.exceptions;
 
+import jakarta.validation.ConstraintViolationException;
+import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.DisabledException;
@@ -16,6 +18,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
+@Log
 public class ControllersExceptionHandler {
 
     @ExceptionHandler(FieldRequiredException.class)
@@ -50,6 +53,7 @@ public class ControllersExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> methodArgumentNotValidExceptionResponse(MethodArgumentNotValidException ex) {
+        log.info("entro");
         String errorsString = ex.getBindingResult().getAllErrors().stream()
                 .map(error -> ((FieldError) error).getField() + ": " + error.getDefaultMessage())
                 .collect(Collectors.joining(", "));
@@ -61,7 +65,11 @@ public class ControllersExceptionHandler {
     public ResponseEntity<Object> maxUploadSizeExceededExceptionResponse(MaxUploadSizeExceededException ex) {
         return new ValidationException("archivo","Demasiado grande, maximo: 2mb").generateResponse();
     }
-   /* @ExceptionHandler(SqlEx.class)
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Object> constraintViolationExceptionResponse(ConstraintViolationException ex) {
+        return new ValidationException("contrain","fallo").generateResponse();
+    }
+    /* @ExceptionHandler(SqlEx.class)
     public ResponseEntity<Object> sqlExceptionResponse(PSQLException ex){
         return new DatabaseHandleExceptions(ex).generateResponse();
     }*/

@@ -1,7 +1,6 @@
-package co.lunadev.adoptaweb.controllers.custom.requests;
+package co.lunadev.adoptaweb.controllers.dto_requests;
 
 import co.lunadev.adoptaweb.models.Municipio;
-import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

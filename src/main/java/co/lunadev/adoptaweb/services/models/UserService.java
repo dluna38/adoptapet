@@ -1,7 +1,7 @@
 package co.lunadev.adoptaweb.services.models;
 
-import co.lunadev.adoptaweb.controllers.custom.requests.LogInRequest;
-import co.lunadev.adoptaweb.controllers.custom.response.TokenResponse;
+import co.lunadev.adoptaweb.controllers.dto_requests.LogInRequest;
+import co.lunadev.adoptaweb.controllers.response.TokenResponse;
 import co.lunadev.adoptaweb.exceptions.ValidationException;
 import co.lunadev.adoptaweb.models.User;
 import co.lunadev.adoptaweb.repositories.UserRepository;

@@ -1,15 +1,11 @@
 package co.lunadev.adoptaweb.controllers;
 
-import co.lunadev.adoptaweb.controllers.custom.requests.NewPeticionRegistroRequest;
-import co.lunadev.adoptaweb.exceptions.FieldRequiredException;
+import co.lunadev.adoptaweb.controllers.dto_requests.NewPeticionRegistroRequest;
 import co.lunadev.adoptaweb.models.PeticionRegistro;
-import co.lunadev.adoptaweb.models.Refugio;
 import co.lunadev.adoptaweb.services.models.PeticionRegistroService;
-import co.lunadev.adoptaweb.validators.PeticionRegistroValidator;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.DataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 

@@ -30,6 +30,10 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        /**TODO
+         * proteger admin/** solo para rol admin
+         */
+
         http.csrf(AbstractHttpConfigurer::disable).cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth.anyRequest().permitAll()/*auth
                         .requestMatchers(HttpMethod.POST,"/auth","/auth/login").permitAll()

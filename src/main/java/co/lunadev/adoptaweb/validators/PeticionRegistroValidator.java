@@ -1,6 +1,6 @@
 package co.lunadev.adoptaweb.validators;
 
-import co.lunadev.adoptaweb.controllers.custom.requests.NewPeticionRegistroRequest;
+import co.lunadev.adoptaweb.controllers.dto_requests.NewPeticionRegistroRequest;
 import co.lunadev.adoptaweb.repositories.MunicipioRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;

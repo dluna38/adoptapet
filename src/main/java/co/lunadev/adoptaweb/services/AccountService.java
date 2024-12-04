@@ -1,10 +1,13 @@
 package co.lunadev.adoptaweb.services;
 
 import co.lunadev.adoptaweb.exceptions.ResourceNotFoundException;
+import co.lunadev.adoptaweb.exceptions.UnknownException;
+import co.lunadev.adoptaweb.exceptions.ValidationException;
 import co.lunadev.adoptaweb.models.PeticionRegistro;
 import co.lunadev.adoptaweb.models.Refugio;
 import co.lunadev.adoptaweb.models.User;
 import co.lunadev.adoptaweb.repositories.PeticionRegistroRepository;
+import co.lunadev.adoptaweb.repositories.RefugioRepository;
 import co.lunadev.adoptaweb.repositories.UserRepository;
 import lombok.extern.java.Log;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,19 +17,27 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class AccountService {
 
-    private PeticionRegistroRepository peticionRegistroRepository;
-    private PasswordEncoder passwordEncoder;
+    private final PeticionRegistroRepository peticionRegistroRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final RefugioRepository refugioRepository;
 
-    public AccountService(PeticionRegistroRepository peticionRegistroRepository, PasswordEncoder passwordEncoder) {
+    public AccountService(PeticionRegistroRepository peticionRegistroRepository, PasswordEncoder passwordEncoder, UserRepository userRepository, RefugioRepository refugioRepository) {
         this.peticionRegistroRepository = peticionRegistroRepository;
         this.passwordEncoder = passwordEncoder;
+        this.userRepository = userRepository;
+        this.refugioRepository = refugioRepository;
     }
 
     @Transactional
     public void approveAccount(Long idPeticion){
         PeticionRegistro peticionRegistro = peticionRegistroRepository.findById(idPeticion).orElseThrow(()->new ResourceNotFoundException("Peticion"));
+
+        if(peticionRegistro.isAprobado()){
+            throw new ValidationException("La petición ya esta aprobada");
+        }
+
         peticionRegistro.setAprobado(true);
         Refugio newRefugio = new Refugio();
         newRefugio.setCorreo(peticionRegistro.getCorreo());
@@ -45,6 +56,11 @@ public class AccountService {
         newRefugio.setUsuario(newUser);
         newUser.setRefugio(newRefugio);
 
-        userRepository.save(newUser);
+        try {
+            refugioRepository.save(newRefugio);
+            userRepository.save(newUser);
+        } catch (Exception e) {
+            throw new UnknownException("No se pudo agregar el usuario, "+e.getMessage());
+        }
     }
 }

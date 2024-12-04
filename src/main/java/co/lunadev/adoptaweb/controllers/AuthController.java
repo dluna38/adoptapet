@@ -1,17 +1,14 @@
 package co.lunadev.adoptaweb.controllers;
 
 
-import co.lunadev.adoptaweb.controllers.custom.requests.LogInRequest;
-import co.lunadev.adoptaweb.controllers.custom.response.TokenResponse;
+import co.lunadev.adoptaweb.controllers.dto_requests.LogInRequest;
+import co.lunadev.adoptaweb.controllers.response.TokenResponse;
 import co.lunadev.adoptaweb.models.User;
-import co.lunadev.adoptaweb.services.mail.EmailSender;
 import co.lunadev.adoptaweb.services.mail.RegistrationReceivedEmail;
 import co.lunadev.adoptaweb.services.models.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

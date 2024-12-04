@@ -1,6 +1,6 @@
 package co.lunadev.adoptaweb.models;
 
-import co.lunadev.adoptaweb.controllers.custom.requests.NewPeticionRegistroRequest;
+import co.lunadev.adoptaweb.controllers.dto_requests.NewPeticionRegistroRequest;
 import co.lunadev.adoptaweb.models.archivos.FotoPeticionRegistro;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;

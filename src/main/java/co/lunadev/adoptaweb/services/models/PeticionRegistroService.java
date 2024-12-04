@@ -1,11 +1,10 @@
 package co.lunadev.adoptaweb.services.models;
 
-import co.lunadev.adoptaweb.controllers.custom.requests.NewPeticionRegistroRequest;
+import co.lunadev.adoptaweb.controllers.dto_requests.NewPeticionRegistroRequest;
 import co.lunadev.adoptaweb.exceptions.FieldRequiredException;
 import co.lunadev.adoptaweb.exceptions.UnknownException;
 import co.lunadev.adoptaweb.exceptions.ValidationException;
 import co.lunadev.adoptaweb.models.PeticionRegistro;
-import co.lunadev.adoptaweb.models.archivos.BaseArchivos;
 import co.lunadev.adoptaweb.models.archivos.FotoPeticionRegistro;
 import co.lunadev.adoptaweb.repositories.MunicipioRepository;
 import co.lunadev.adoptaweb.repositories.PeticionRegistroRepository;
