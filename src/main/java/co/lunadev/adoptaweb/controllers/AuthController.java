@@ -4,7 +4,8 @@ package co.lunadev.adoptaweb.controllers;
 import co.lunadev.adoptaweb.controllers.dto_requests.LogInRequest;
 import co.lunadev.adoptaweb.controllers.response.TokenResponse;
 import co.lunadev.adoptaweb.models.User;
-import co.lunadev.adoptaweb.services.mail.RegistrationReceivedEmail;
+import co.lunadev.adoptaweb.services.mail.DispatcherEmail;
+import co.lunadev.adoptaweb.services.mail.account.RegistrationReceivedEmail;
 import co.lunadev.adoptaweb.services.models.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -17,10 +18,12 @@ public class AuthController {
     private final UserService userService;
 
     private final RegistrationReceivedEmail registrationReceivedEmail;
+    private final DispatcherEmail dispatcherEmail;
 
-    public AuthController(UserService userService, RegistrationReceivedEmail registrationReceivedEmail) {
+    public AuthController(UserService userService, RegistrationReceivedEmail registrationReceivedEmail, DispatcherEmail dispatcherEmail) {
         this.userService = userService;
         this.registrationReceivedEmail = registrationReceivedEmail;
+        this.dispatcherEmail = dispatcherEmail;
     }
 
     @PostMapping("/login")
@@ -35,6 +38,6 @@ public class AuthController {
 
     @GetMapping("/test")
     public ResponseEntity<Object> test(){
-        return ResponseEntity.ok(registrationReceivedEmail.sendMail("Refugio CEIBA","correo@corre.com"));
+        return ResponseEntity.ok(dispatcherEmail.accountApprovedEmail().send("correo@corre.com","Refugio CEIBA","123"));
     }
 }

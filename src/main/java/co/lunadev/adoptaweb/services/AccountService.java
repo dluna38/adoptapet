@@ -9,7 +9,7 @@ import co.lunadev.adoptaweb.models.User;
 import co.lunadev.adoptaweb.repositories.PeticionRegistroRepository;
 import co.lunadev.adoptaweb.repositories.RefugioRepository;
 import co.lunadev.adoptaweb.repositories.UserRepository;
-import lombok.extern.java.Log;
+import co.lunadev.adoptaweb.services.mail.DispatcherEmail;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,12 +22,14 @@ public class AccountService {
 
     private final UserRepository userRepository;
     private final RefugioRepository refugioRepository;
+    private final DispatcherEmail dispatcherEmail;
 
-    public AccountService(PeticionRegistroRepository peticionRegistroRepository, PasswordEncoder passwordEncoder, UserRepository userRepository, RefugioRepository refugioRepository) {
+    public AccountService(PeticionRegistroRepository peticionRegistroRepository, PasswordEncoder passwordEncoder, UserRepository userRepository, RefugioRepository refugioRepository, DispatcherEmail dispatcherEmail) {
         this.peticionRegistroRepository = peticionRegistroRepository;
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.refugioRepository = refugioRepository;
+        this.dispatcherEmail = dispatcherEmail;
     }
 
     @Transactional
@@ -50,7 +52,8 @@ public class AccountService {
         User newUser = new User();
         newUser.setEmail(newRefugio.getCorreo());
         newUser.setRole(User.Rol.ROLE_USUARIO);
-        newUser.setPassword(passwordEncoder.encode("123"));
+        String tempPassword = "123456";
+        newUser.setPassword(passwordEncoder.encode(tempPassword));
         newUser.setChangePassword(true);
 
         newRefugio.setUsuario(newUser);
@@ -59,6 +62,7 @@ public class AccountService {
         try {
             refugioRepository.save(newRefugio);
             userRepository.save(newUser);
+            dispatcherEmail.accountApprovedEmail().send(newUser.getEmail(), newRefugio.getNombreRefugio(), tempPassword);
         } catch (Exception e) {
             throw new UnknownException("No se pudo agregar el usuario, "+e.getMessage());
         }
