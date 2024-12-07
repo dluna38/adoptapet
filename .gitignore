@@ -41,6 +41,8 @@ src/resources/db/
 src/resources/db
 logs
 src/resources/images/
+src/resources/images/fotos_animal/
+src/resources/images/fotos_registro/
 src/resources/templates/mail/
 *.http
 *.ftlh
