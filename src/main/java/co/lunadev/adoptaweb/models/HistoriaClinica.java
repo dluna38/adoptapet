@@ -6,6 +6,9 @@ import lombok.Getter;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
+import java.util.EnumSet;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Entity
 @Data
@@ -16,16 +19,22 @@ public class HistoriaClinica {
     @OneToOne(mappedBy = "historiaClinica",optional = false)
     private Animal animal;
     @ColumnDefault("0")
-    private Boolean estaEsterilizado;
+    @Column(nullable = false)
+    private boolean estaEsterilizado;
     @ColumnDefault("0")
-    private Boolean estaVacunado;
+    @Column(nullable = false)
+    private boolean estaVacunado;
     @Enumerated(EnumType.ORDINAL)
+    @Column(nullable = false)
     private EstadoGeneralAnimal estadoGeneral;
     @Enumerated
+    @Column(nullable = false)
     private CondicionMedicaAnimal condicionMedica;
     @Enumerated
+    @Column(nullable = false)
     private NecesidadEspecialAnimal necesidadesEspeciales;
     @Enumerated
+    @Column(nullable = false)
     private ComportamientoAnimal comportamiento;
     private String observaciones;
     private String vacunas;
@@ -83,5 +92,6 @@ public class HistoriaClinica {
         NecesidadEspecialAnimal(String descripcion) {
             this.descripcion = descripcion;
         }
+
     }
 }

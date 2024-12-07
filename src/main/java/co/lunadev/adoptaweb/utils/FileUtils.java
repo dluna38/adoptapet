@@ -1,6 +1,9 @@
 package co.lunadev.adoptaweb.utils;
 
+import co.lunadev.adoptaweb.exceptions.UnknownException;
+import co.lunadev.adoptaweb.exceptions.ValidationException;
 import co.lunadev.adoptaweb.models.archivos.BaseArchivos;
+import co.lunadev.adoptaweb.models.archivos.FotoPeticionRegistro;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -11,6 +14,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -37,7 +41,7 @@ public class FileUtils {
         String savePath;
         //path+name+ext
         do {
-            savePath = directoryPath + getRandomName() + getFileExtension(file.getOriginalFilename());
+            savePath = directoryPath + getRandomName() +"."+getFileExtension(file.getOriginalFilename());
             currentTry++;
         } while (currentTry <= maxSaveTrys && Files.exists(Path.of(savePath)));
 
@@ -49,8 +53,8 @@ public class FileUtils {
             return savePath;
         } catch (IOException e) {
             log.severe("Fallo escribir archivo: "+e.getMessage());
+            throw new UnknownException("Ocurrio un error procesando el archivo");
         }
-        return "";
     }
     public static File getFile(String directoryPath, String fileName){
         File file = new File(directoryPath+fileName);
@@ -104,6 +108,9 @@ public class FileUtils {
     }
     public static int deleteFiles(List<? extends BaseArchivos> archivos){
         int totalDeleteFiles = 0;
+        if(archivos == null){
+            return totalDeleteFiles;
+        }
         for(BaseArchivos file : archivos){
             try {
                 if(file.getPath() == null){
@@ -116,5 +123,20 @@ public class FileUtils {
             }
         }
         return totalDeleteFiles;
+    }
+
+    public static List<BaseArchivos> saveFilesFromRequest(List<MultipartFile> files,String path){
+        List<BaseArchivos> archivos = new ArrayList<>();
+        for (MultipartFile file : files) {
+            if (!FileUtils.fileIsImage(file)) {
+                throw new ValidationException("archivo", "no es una imagen");
+            }
+            String pathFileSaved = FileUtils.saveFile(path, file);
+            if (pathFileSaved.isEmpty()) {
+                throw new UnknownException("No se pudo procesar los archivos");
+            }
+            archivos.add(new BaseArchivos(pathFileSaved,FileUtils.getFileNameFromPath(pathFileSaved), file.getOriginalFilename()));
+        }
+        return archivos;
     }
 }

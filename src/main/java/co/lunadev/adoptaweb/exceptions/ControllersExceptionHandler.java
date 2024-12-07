@@ -2,6 +2,8 @@ package co.lunadev.adoptaweb.exceptions;
 
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.java.Log;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.DisabledException;
@@ -20,6 +22,12 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 @Log
 public class ControllersExceptionHandler {
+
+    MessageSource messageSource;
+
+    public ControllersExceptionHandler(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
 
     @ExceptionHandler(FieldRequiredException.class)
     public ResponseEntity<Object> fieldRequiredResponse(FieldRequiredException ex) {
@@ -53,9 +61,10 @@ public class ControllersExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> methodArgumentNotValidExceptionResponse(MethodArgumentNotValidException ex) {
-        log.info("entro");
         String errorsString = ex.getBindingResult().getAllErrors().stream()
-                .map(error -> ((FieldError) error).getField() + ": " + error.getDefaultMessage())
+                .map(error ->
+                        ((FieldError) error).getField() + ": " +
+                                messageSource.getMessage(error.getCode(),error.getArguments(),error.getDefaultMessage(), LocaleContextHolder.getLocale()))
                 .collect(Collectors.joining(", "));
 
         return new AppHttpException(errorsString, HttpStatus.BAD_REQUEST).generateResponse();

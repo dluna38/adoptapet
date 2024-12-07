@@ -62,7 +62,7 @@ public class AccountService {
         try {
             refugioRepository.save(newRefugio);
             userRepository.save(newUser);
-            dispatcherEmail.accountApprovedEmail().send(newUser.getEmail(), newRefugio.getNombreRefugio(), tempPassword);
+            dispatcherEmail.accountApprovedEmail().body(newUser.getEmail(), newRefugio.getNombreRefugio(), tempPassword).execute();
         } catch (Exception e) {
             throw new UnknownException("No se pudo agregar el usuario, "+e.getMessage());
         }

@@ -5,9 +5,11 @@ import co.lunadev.adoptaweb.exceptions.FieldRequiredException;
 import co.lunadev.adoptaweb.exceptions.UnknownException;
 import co.lunadev.adoptaweb.exceptions.ValidationException;
 import co.lunadev.adoptaweb.models.PeticionRegistro;
+import co.lunadev.adoptaweb.models.archivos.BaseArchivos;
 import co.lunadev.adoptaweb.models.archivos.FotoPeticionRegistro;
 import co.lunadev.adoptaweb.repositories.MunicipioRepository;
 import co.lunadev.adoptaweb.repositories.PeticionRegistroRepository;
+import co.lunadev.adoptaweb.services.mail.DispatcherEmail;
 import co.lunadev.adoptaweb.utils.FileUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,15 +17,18 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PeticionRegistroService {
-    private PeticionRegistroRepository peticionRegistroRepository;
-    private MunicipioRepository municipioRepository;
+    private final PeticionRegistroRepository peticionRegistroRepository;
+    private final MunicipioRepository municipioRepository;
+    private final DispatcherEmail dispatcherEmail;
 
-    public PeticionRegistroService(PeticionRegistroRepository peticionRegistroRepository, MunicipioRepository municipioRepository) {
+    public PeticionRegistroService(PeticionRegistroRepository peticionRegistroRepository, MunicipioRepository municipioRepository, DispatcherEmail dispatcherEmail) {
         this.peticionRegistroRepository = peticionRegistroRepository;
         this.municipioRepository = municipioRepository;
+        this.dispatcherEmail = dispatcherEmail;
     }
 
     @Transactional
@@ -36,22 +41,17 @@ public class PeticionRegistroService {
             throw new FieldRequiredException("fotos");
         }
         PeticionRegistro newPeticionRegistro = new PeticionRegistro();
-        List<FotoPeticionRegistro> fotos = new ArrayList<>();
 
-        for (MultipartFile file : request.getFotos()) {
-            if (!FileUtils.fileIsImage(file)) {
-                throw new ValidationException("archivo", "no es una imagen");
-            }
-            String pathFileSaved = FileUtils.saveFile(FotoPeticionRegistro.DIRECTORY_PATH, file);
-            if (pathFileSaved.isEmpty()) {
-                throw new UnknownException("No se pudo procesar los archivos");
-            }
-            fotos.add(new FotoPeticionRegistro(pathFileSaved,FileUtils.getFileNameFromPath(pathFileSaved), file.getOriginalFilename(),newPeticionRegistro));
-        }
+        List<FotoPeticionRegistro> fotos = FileUtils.saveFilesFromRequest(request.getFotos(),FotoPeticionRegistro.DIRECTORY_PATH)
+                .stream().map(bFile ->
+                        new FotoPeticionRegistro(bFile.getPath(),bFile.getNombreInterno(),bFile.getNombreOriginalFoto(),newPeticionRegistro))
+                .toList();
+
         try {
             newPeticionRegistro.setFotos(fotos);
             newPeticionRegistro.parsePeticionRegistroRequest(request);
             peticionRegistroRepository.save(newPeticionRegistro);
+            dispatcherEmail.registrationReceivedEmail().body(newPeticionRegistro.getCorreo(), newPeticionRegistro.getNombreRefugio()).execute();
         } catch (Exception e) {
             FileUtils.deleteFiles(fotos);
             throw new UnknownException("Ocurrió un error guardando el registro");
@@ -60,10 +60,10 @@ public class PeticionRegistroService {
 
 
     public List<PeticionRegistro> getAllPeticionesRegistro(){
-        List<PeticionRegistro> peticiones = peticionRegistroRepository.findAll();
+        //List<PeticionRegistro> peticiones = peticionRegistroRepository.findAll();
 
         //System.out.println(peticiones.get(0).getCorreo());
         //System.out.println(peticiones.get(0).getFotos());
-        return peticiones;
+        return peticionRegistroRepository.findAll();
     }
 }

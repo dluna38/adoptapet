@@ -3,15 +3,17 @@ package co.lunadev.adoptaweb.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Fetch;
 
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
 public class Refugio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,9 +40,16 @@ public class Refugio {
     private Boolean verificado;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @ToString.Exclude
     private Municipio ubicacionMunicipio;
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "refugio")
+    @ToString.Exclude
     private List<AnuncioRefugio> anuncios;
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "refugio")
+    @ToString.Exclude
     private List<Animal> animales;
+
+    public Refugio(Long id) {
+        this.id = id;
+    }
 }

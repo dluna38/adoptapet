@@ -18,6 +18,8 @@ public class FotoPeticionRegistro extends BaseArchivos {
     @EqualsAndHashCode.Exclude
     private PeticionRegistro peticionRegistro;
     @Transient
+    private static final short MAX_FILES = 3;
+    @Transient
     public static final String DIRECTORY_PATH="src/main/resources/images/fotos_registro/";
 
     public FotoPeticionRegistro(String nombreInterno, String nombreOriginalFoto, PeticionRegistro peticionRegistro) {

@@ -5,11 +5,14 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import jakarta.mail.MessagingException;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.java.Log;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.config.Task;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
 import java.io.*;
@@ -17,40 +20,56 @@ import java.util.Map;
 import java.util.Objects;
 
 @Log
-public abstract class EmailSender {
+@Getter
+@Setter
+public abstract class EmailSender implements Runnable{
 
     protected final JavaMailSender jMailSender;
     protected final freemarker.template.Configuration freeMarkerConfigurer;
-    @Setter(value = AccessLevel.PACKAGE)
     protected String templatePath;
-    @Setter(value = AccessLevel.PACKAGE)
     protected String subject;
+    protected String to;
+    protected Map<String,Object> data;
+    private final TaskExecutor taskExecutor;
 
-    protected EmailSender(JavaMailSender jMailSender, Configuration freeMarkerConfigurer) {
+    protected EmailSender(JavaMailSender jMailSender, Configuration freeMarkerConfigurer, TaskExecutor taskExecutor) {
         this.jMailSender = jMailSender;
         this.freeMarkerConfigurer = freeMarkerConfigurer;
+
+        this.taskExecutor = taskExecutor;
     }
 
-    protected EmailSender(JavaMailSender jMailSender, Configuration freeMarkerConfigurer, String templatePath, String subject) {
+    @Override
+    public void run() {
+        sendSimpleMessage();
+    }
+
+    protected EmailSender(JavaMailSender jMailSender, Configuration freeMarkerConfigurer, TaskExecutor taskExecutor,String templatePath, String subject) {
         this.jMailSender = jMailSender;
         this.freeMarkerConfigurer = freeMarkerConfigurer;
         this.templatePath = templatePath;
         this.subject = subject;
+        this.taskExecutor = taskExecutor;
     }
 
-    protected String fillTemplate(Map<String,Object> data) throws IOException, TemplateException {
+    /**
+     *  Envia el correo agregandolo al hilo de envio de emails
+     */
+    public void execute(){
+        this.taskExecutor.execute(this);
+    }
+
+    protected String fillTemplate() throws IOException, TemplateException {
         return FreeMarkerTemplateUtils.processTemplateIntoString(
-                getTemplateFileMarker(), data);
+                getTemplateFileMarker(), this.data);
     }
 
-    protected boolean sendSimpleMessage(String to,Map<String,Object> data) {
-
+    protected boolean sendSimpleMessage() {
         try {
             MimeMessageHelper helper = getMimeMsgHelper();
-            helper.setTo(to);
-            System.out.println(helper.getEncoding());
+            helper.setTo(this.to);
             helper.setSubject(this.subject);
-            helper.setText(Objects.requireNonNull(fillTemplate(data),"fallo cargando el email template"), true);
+            helper.setText(Objects.requireNonNull(fillTemplate(),"fallo cargando el email template"), true);
             jMailSender.send(helper.getMimeMessage());
             return true;
         } catch (MessagingException | MailException | NullPointerException e) {

@@ -1,11 +1,13 @@
 package co.lunadev.adoptaweb.config;
 
 import co.lunadev.adoptaweb.services.mail.DispatcherEmail;
+import co.lunadev.adoptaweb.services.mail.LoggingTaskDecorator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 
 import java.nio.charset.StandardCharsets;
@@ -39,6 +41,18 @@ public class EmailConfig {
 
     @Bean
     DispatcherEmail dispatcherEmail(freemarker.template.Configuration configuration) {
-        return new DispatcherEmail(mailSender(),configuration);
+        return new DispatcherEmail(mailSender(),configuration,emailExecutor());
     }
+
+    @Bean
+    ThreadPoolTaskExecutor emailExecutor() {
+        ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
+        taskExecutor.setCorePoolSize(5); //prom threads
+        taskExecutor.setMaxPoolSize(10); //max threads when queue is full
+        taskExecutor.setQueueCapacity(50);
+        taskExecutor.setAllowCoreThreadTimeOut(true);
+        //taskExecutor.setTaskDecorator(new LoggingTaskDecorator());
+        return taskExecutor;
+    }
+
 }

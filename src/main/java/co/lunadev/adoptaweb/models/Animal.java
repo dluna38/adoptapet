@@ -2,44 +2,56 @@ package co.lunadev.adoptaweb.models;
 
 import co.lunadev.adoptaweb.models.archivos.FotosAnimal;
 import jakarta.persistence.*;
-import lombok.Data;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 public class Animal {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
+    @NotBlank
     private String nombre;
+    @NotBlank
     private String color;
     @Enumerated
     private Tamano tamano;
     //solo contar el mes y año
+    @NotNull
     private LocalDate fechaNacimiento;
     @ColumnDefault("0")
-    private Boolean habilitadoAdopcion;
+    private boolean habilitadoAdopcion;
     @ColumnDefault("0")
-    private Boolean tieneChip;
+    private boolean tieneChip;
+    @Column(unique=true)
     private String chipCode;
     private String descripcion;
-    @OneToOne
+    @OneToOne(optional = false)
     private HistoriaClinica historiaClinica;
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(nullable = false,name = "raza_id",foreignKey = @ForeignKey(name = "FK_RAZA_ANIMAL"))
+    @NotNull
     private Raza raza;
-    @OneToMany(mappedBy = "animal")
+    @OneToMany(mappedBy = "animal",cascade = {CascadeType.ALL},fetch = FetchType.LAZY)
+    @ToString.Exclude
     private List<FotosAnimal> fotos;
-    @ManyToOne
+
+
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ToString.Exclude
     private Refugio refugio;
 
     @CreationTimestamp
@@ -52,4 +64,5 @@ public class Animal {
     public enum Tamano {
         PEQUENO,MEDIANO,GRANDE
     }
+
 }

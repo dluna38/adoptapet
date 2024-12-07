@@ -43,3 +43,4 @@ logs
 src/resources/images/
 src/resources/templates/mail/
 *.http
+*.ftlh

@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @Getter @Setter
 @NoArgsConstructor
-public abstract class BaseArchivos {
+public class BaseArchivos {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
