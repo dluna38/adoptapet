@@ -4,13 +4,11 @@ import co.lunadev.adoptaweb.models.PeticionRegistro;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-public class FotoPeticionRegistro extends BaseArchivos {
+public class FotoPeticionRegistro extends BaseArchivo {
 
     @ManyToOne(optional = false,cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)

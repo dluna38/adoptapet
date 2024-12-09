@@ -1,6 +1,6 @@
 package co.lunadev.adoptaweb.models;
 
-import co.lunadev.adoptaweb.models.archivos.FotosAnimal;
+import co.lunadev.adoptaweb.models.archivos.FotoAnimal;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -38,6 +38,7 @@ public class Animal {
     private boolean tieneChip;
     @Column(unique=true)
     private String chipCode;
+    @Column(length = 1000)
     private String descripcion;
     @OneToOne(optional = false)
     private HistoriaClinica historiaClinica;
@@ -47,8 +48,10 @@ public class Animal {
     private Raza raza;
     @OneToMany(mappedBy = "animal",cascade = {CascadeType.ALL},fetch = FetchType.LAZY)
     @ToString.Exclude
-    private List<FotosAnimal> fotos;
-
+    private List<FotoAnimal> fotos;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn()
+    private FotoAnimal fotoPortada;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @ToString.Exclude

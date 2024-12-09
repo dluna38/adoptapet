@@ -2,7 +2,6 @@ package co.lunadev.adoptaweb.models.archivos;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,7 +13,7 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @Getter @Setter
 @NoArgsConstructor
-public class BaseArchivos {
+public class BaseArchivo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,12 +28,12 @@ public class BaseArchivos {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    protected BaseArchivos(String nombreInterno, String nombreOriginalFoto) {
+    protected BaseArchivo(String nombreInterno, String nombreOriginalFoto) {
         this.nombreInterno = nombreInterno;
         this.nombreOriginalFoto = nombreOriginalFoto;
     }
 
-    public BaseArchivos(String path, String nombreInterno, String nombreOriginalFoto) {
+    public BaseArchivo(String path, String nombreInterno, String nombreOriginalFoto) {
         this.path = path;
         this.nombreInterno = nombreInterno;
         this.nombreOriginalFoto = nombreOriginalFoto;

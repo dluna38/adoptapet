@@ -7,12 +7,10 @@ import co.lunadev.adoptaweb.exceptions.UnknownException;
 import co.lunadev.adoptaweb.exceptions.ValidationException;
 import co.lunadev.adoptaweb.models.Animal;
 import co.lunadev.adoptaweb.models.HistoriaClinica;
-import co.lunadev.adoptaweb.models.Refugio;
-import co.lunadev.adoptaweb.models.archivos.FotosAnimal;
+import co.lunadev.adoptaweb.models.archivos.FotoAnimal;
 import co.lunadev.adoptaweb.repositories.AnimalRepository;
 import co.lunadev.adoptaweb.repositories.HistoriaClinicaRepository;
 import co.lunadev.adoptaweb.utils.FileUtils;
-import co.lunadev.adoptaweb.utils.UtilString;
 import jakarta.validation.Valid;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
@@ -34,10 +32,10 @@ public class AnimalService {
     public void newAnimal(@Valid NewAnimalRequest animalRequest) {
         System.out.println(animalRequest);
         if(animalRequest.getFotos() == null){
-            throw new FieldRequiredException("fotos");
+            throw new FieldRequiredException("foto");
         }
-        if(animalRequest.getFotos().size() > FotosAnimal.MAX_FILES){
-            throw new ValidationException("No mas de "+FotosAnimal.MAX_FILES+" fotos");
+        if(animalRequest.getFotos().size() > FotoAnimal.MAX_FILES){
+            throw new ValidationException("No mas de "+ FotoAnimal.MAX_FILES+" fotos");
         }
 
         Animal newAnimal = animalRequest.getAnimal();
@@ -56,15 +54,15 @@ public class AnimalService {
             //newAnimal.setRefugio(new Refugio(user.getRefugio));
             historiaClinicaRepository.save(historiaClinica);
             newAnimal.setHistoriaClinica(historiaClinica);
-            newAnimal.setFotos(FileUtils.saveFilesFromRequest(animalRequest.getFotos(),FotosAnimal.DIRECTORY_PATH)
+            newAnimal.setFotos(FileUtils.saveFilesFromRequest(animalRequest.getFotos(), FotoAnimal.DIRECTORY_PATH)
                     .stream().map(bFile ->
-                            new FotosAnimal(bFile.getPath(),bFile.getNombreInterno(),bFile.getNombreOriginalFoto(),newAnimal))
+                            new FotoAnimal(bFile.getPath(),bFile.getNombreInterno(),bFile.getNombreOriginalFoto(),newAnimal))
                     .toList());
             animalRepository.save(newAnimal);
-
-
+            animalRepository.updateFotoPortadaById(newAnimal.getFotos().get(0), newAnimal.getId());
         } catch (Exception e) {
             log.severe("Error al guardar animal: "+e.getMessage());
+            e.printStackTrace();
             FileUtils.deleteFiles(newAnimal.getFotos());
             throw new UnknownException("Ocurrio un error al crear el animal");
         }

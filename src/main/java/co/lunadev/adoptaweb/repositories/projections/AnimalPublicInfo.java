@@ -3,10 +3,10 @@ package co.lunadev.adoptaweb.repositories.projections;
 import co.lunadev.adoptaweb.models.Animal;
 import co.lunadev.adoptaweb.models.HistoriaClinica;
 import co.lunadev.adoptaweb.models.Raza;
+import co.lunadev.adoptaweb.models.archivos.FotoAnimal;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * Projection for {@link co.lunadev.adoptaweb.models.Animal}
@@ -26,9 +26,9 @@ public interface AnimalPublicInfo {
 
     HistoriaClinicaInfo getHistoriaClinica();
 
-    //List<FotosAnimalInfo> getFotos();
+   FotosAnimalInfo getFotoPortada();
 
-    RefugioInfo getRefugio();
+    //RefugioInfo getRefugio();
 
     Raza getRaza();
 
@@ -54,7 +54,7 @@ public interface AnimalPublicInfo {
     }
 
     /**
-     * Projection for {@link co.lunadev.adoptaweb.models.archivos.FotosAnimal}
+     * Projection for {@link FotoAnimal}
      */
     interface FotosAnimalInfo {
         String getNombreInterno();

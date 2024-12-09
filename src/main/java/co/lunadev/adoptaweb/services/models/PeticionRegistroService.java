@@ -5,7 +5,6 @@ import co.lunadev.adoptaweb.exceptions.FieldRequiredException;
 import co.lunadev.adoptaweb.exceptions.UnknownException;
 import co.lunadev.adoptaweb.exceptions.ValidationException;
 import co.lunadev.adoptaweb.models.PeticionRegistro;
-import co.lunadev.adoptaweb.models.archivos.BaseArchivos;
 import co.lunadev.adoptaweb.models.archivos.FotoPeticionRegistro;
 import co.lunadev.adoptaweb.repositories.MunicipioRepository;
 import co.lunadev.adoptaweb.repositories.PeticionRegistroRepository;
@@ -13,11 +12,8 @@ import co.lunadev.adoptaweb.services.mail.DispatcherEmail;
 import co.lunadev.adoptaweb.utils.FileUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class PeticionRegistroService {

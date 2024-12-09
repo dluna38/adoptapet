@@ -2,9 +2,9 @@ package co.lunadev.adoptaweb.utils;
 
 import co.lunadev.adoptaweb.exceptions.UnknownException;
 import co.lunadev.adoptaweb.exceptions.ValidationException;
-import co.lunadev.adoptaweb.models.archivos.BaseArchivos;
-import co.lunadev.adoptaweb.models.archivos.FotoPeticionRegistro;
+import co.lunadev.adoptaweb.models.archivos.BaseArchivo;
 import lombok.extern.java.Log;
+import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.regex.Matcher;
@@ -60,16 +59,23 @@ public class FileUtils {
         File file = new File(directoryPath+fileName);
         return file.exists() ? file : null;
     }
-    public static HttpHeaders getHttpHeadersForImage(String fileName){
+
+    public enum ContentTypeFile{
+        ATTACHMENT,INLINE;
+    }
+    public static HttpHeaders getHttpHeadersForImage(String fileName, ContentTypeFile contentType){
         HttpHeaders headers = new HttpHeaders();
         // inline | attachment
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"");
+        ContentDisposition.Builder builder = contentType.equals(ContentTypeFile.ATTACHMENT)
+                ? ContentDisposition.attachment()
+                : ContentDisposition.inline();
+        headers.setContentDisposition(builder.filename(fileName).build());
         //to shown on browser, change content type
         String mediaType = parseImgExtToMediaType(fileName);
-        if (mediaType.isEmpty()){
-            return headers;
+        if (!mediaType.isEmpty()){
+            headers.add(HttpHeaders.CONTENT_TYPE, mediaType);
         }
-        headers.add(HttpHeaders.CONTENT_TYPE, mediaType);
+
         return headers;
     }
     public static String parseImgExtToMediaType(String filename){
@@ -106,12 +112,12 @@ public class FileUtils {
             return path; // Si no hay barras, retorna el path completo
         }
     }
-    public static int deleteFiles(List<? extends BaseArchivos> archivos){
+    public static int deleteFiles(List<? extends BaseArchivo> archivos){
         int totalDeleteFiles = 0;
         if(archivos == null){
             return totalDeleteFiles;
         }
-        for(BaseArchivos file : archivos){
+        for(BaseArchivo file : archivos){
             try {
                 if(file.getPath() == null){
                     continue;
@@ -124,9 +130,12 @@ public class FileUtils {
         }
         return totalDeleteFiles;
     }
+    public static int deleteFile(BaseArchivo archivos){
+        return deleteFiles(List.of(archivos));
+    }
 
-    public static List<BaseArchivos> saveFilesFromRequest(List<MultipartFile> files,String path){
-        List<BaseArchivos> archivos = new ArrayList<>();
+    public static List<BaseArchivo> saveFilesFromRequest(List<MultipartFile> files, String path){
+        List<BaseArchivo> archivos = new ArrayList<>();
         for (MultipartFile file : files) {
             if (!FileUtils.fileIsImage(file)) {
                 throw new ValidationException("archivo", "no es una imagen");
@@ -135,8 +144,11 @@ public class FileUtils {
             if (pathFileSaved.isEmpty()) {
                 throw new UnknownException("No se pudo procesar los archivos");
             }
-            archivos.add(new BaseArchivos(pathFileSaved,FileUtils.getFileNameFromPath(pathFileSaved), file.getOriginalFilename()));
+            archivos.add(new BaseArchivo(pathFileSaved,FileUtils.getFileNameFromPath(pathFileSaved), file.getOriginalFilename()));
         }
         return archivos;
+    }
+    public static BaseArchivo saveFilesFromRequest(MultipartFile file, String path){
+        return saveFilesFromRequest(List.of(file),path).get(0);
     }
 }
