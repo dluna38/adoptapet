@@ -2,10 +2,13 @@ package co.lunadev.adoptaweb.controllers;
 
 import co.lunadev.adoptaweb.controllers.dto_requests.NewAnimalRequest;
 import co.lunadev.adoptaweb.models.Animal;
+import co.lunadev.adoptaweb.models.User;
 import co.lunadev.adoptaweb.services.models.AnimalService;
 import co.lunadev.adoptaweb.validators.NewAnimalValidator;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.AuthenticatedPrincipal;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.DataBinder;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -30,12 +33,12 @@ public class AnimalController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void newAnimal(@Valid @RequestPart(name = "datos") NewAnimalRequest animal,
-                          @RequestPart(name = "fotos",required = false) List<MultipartFile> fotos) {
+                          @RequestPart(name = "fotos",required = false) List<MultipartFile> fotos,@AuthenticationPrincipal User user) {
         animal.setFotos(fotos);
-        animalService.newAnimal(animal);
+        animalService.newAnimal(animal,user);
     }
     @PutMapping("/{animalId}")
-    public void editAnimal(@PathVariable Long animalId,@Valid @RequestBody Animal animal){
+    public void editAnimal(@PathVariable Long animalId,@Valid @RequestBody NewAnimalRequest animal){
         animalService.update(animalId,animal);
     }
     @DeleteMapping("/{animalId}")

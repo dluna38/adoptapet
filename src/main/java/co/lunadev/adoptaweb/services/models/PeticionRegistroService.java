@@ -9,7 +9,7 @@ import co.lunadev.adoptaweb.models.archivos.FotoPeticionRegistro;
 import co.lunadev.adoptaweb.repositories.MunicipioRepository;
 import co.lunadev.adoptaweb.repositories.PeticionRegistroRepository;
 import co.lunadev.adoptaweb.services.mail.DispatcherEmail;
-import co.lunadev.adoptaweb.utils.FileUtils;
+import co.lunadev.adoptaweb.utils.UtilFile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,7 +38,7 @@ public class PeticionRegistroService {
         }
         PeticionRegistro newPeticionRegistro = new PeticionRegistro();
 
-        List<FotoPeticionRegistro> fotos = FileUtils.saveFilesFromRequest(request.getFotos(),FotoPeticionRegistro.DIRECTORY_PATH)
+        List<FotoPeticionRegistro> fotos = UtilFile.saveFilesFromRequest(request.getFotos(),FotoPeticionRegistro.DIRECTORY_PATH)
                 .stream().map(bFile ->
                         new FotoPeticionRegistro(bFile.getPath(),bFile.getNombreInterno(),bFile.getNombreOriginalFoto(),newPeticionRegistro))
                 .toList();
@@ -49,7 +49,7 @@ public class PeticionRegistroService {
             peticionRegistroRepository.save(newPeticionRegistro);
             dispatcherEmail.registrationReceivedEmail().body(newPeticionRegistro.getCorreo(), newPeticionRegistro.getNombreRefugio()).execute();
         } catch (Exception e) {
-            FileUtils.deleteFiles(fotos);
+            UtilFile.deleteFiles(fotos);
             throw new UnknownException("Ocurrió un error guardando el registro");
         }
     }

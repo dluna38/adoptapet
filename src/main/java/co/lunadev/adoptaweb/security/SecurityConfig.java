@@ -35,10 +35,11 @@ public class SecurityConfig {
          */
 
         http.csrf(AbstractHttpConfigurer::disable).cors(Customizer.withDefaults())
-                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll()/*auth
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/public/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/auth","/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/error").permitAll()
-                        .anyRequest().authenticated()*/)
+                        .requestMatchers(HttpMethod.GET,"/error","/auth/test").permitAll()
+                        .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

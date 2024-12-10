@@ -10,6 +10,9 @@ import co.lunadev.adoptaweb.repositories.PeticionRegistroRepository;
 import co.lunadev.adoptaweb.repositories.RefugioRepository;
 import co.lunadev.adoptaweb.repositories.UserRepository;
 import co.lunadev.adoptaweb.services.mail.DispatcherEmail;
+import co.lunadev.adoptaweb.utils.UtilString;
+import org.springframework.security.core.AuthenticatedPrincipal;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,6 +51,7 @@ public class AccountService {
         newRefugio.setUbicacionMunicipio(peticionRegistro.getUbicacionMunicipio());
         newRefugio.setDescripcion(peticionRegistro.getDescripcion());
         newRefugio.setTelefono(peticionRegistro.getTelefono());
+        newRefugio.setSlug(UtilString.makeSlug(newRefugio.getNombreRefugio(),35));
 
         User newUser = new User();
         newUser.setEmail(newRefugio.getCorreo());

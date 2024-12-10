@@ -6,9 +6,11 @@ import co.lunadev.adoptaweb.controllers.response.TokenResponse;
 import co.lunadev.adoptaweb.models.User;
 import co.lunadev.adoptaweb.services.mail.DispatcherEmail;
 import co.lunadev.adoptaweb.services.models.UserService;
+import co.lunadev.adoptaweb.utils.UtilString;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -35,8 +37,9 @@ public class AuthController {
     }
 
     @GetMapping("/test")
-    public ResponseEntity<Void> test(){
-        dispatcherEmail.accountApprovedEmail().body("correo@corre.com","Refugio CEIBA","123").execute();
-        return ResponseEntity.ok().build();
+    public ResponseEntity<String> test(){
+
+        //dispatcherEmail.accountApprovedEmail().body("correo@corre.com","Refugio CEIBA","123").execute();
+        return ResponseEntity.ok(UtilString.makeSlug("Refugio CEIBA rioñegró it's c    razy-stuff",35));
     }
 }

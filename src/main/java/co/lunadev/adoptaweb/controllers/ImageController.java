@@ -3,9 +3,9 @@ package co.lunadev.adoptaweb.controllers;
 import co.lunadev.adoptaweb.exceptions.ResourceNotFoundException;
 import co.lunadev.adoptaweb.models.archivos.FotoAnimal;
 import co.lunadev.adoptaweb.repositories.FotoAnimalRepository;
-import co.lunadev.adoptaweb.utils.FileUtils;
+import co.lunadev.adoptaweb.repositories.projections.AnimalPublicInfo;
+import co.lunadev.adoptaweb.utils.UtilFile;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.File;
+import java.util.List;
 
 @RestController
 @RequestMapping("/img")
@@ -32,16 +33,14 @@ public class ImageController {
 
         if(file.exists()){
             return ResponseEntity.ok()
-                    .headers(FileUtils.getHttpHeadersForImage(fotoAnimal.getNombreOriginalFoto(), FileUtils.ContentTypeFile.INLINE))
+                    .headers(UtilFile.getHttpHeadersForImage(fotoAnimal.getNombreOriginalFoto(), UtilFile.ContentTypeFile.INLINE))
                     .body(new FileSystemResource(file));
         }else {
             throw new ResourceNotFoundException("File not found");
         }
-        /*Map<String,String> myMap = new HashMap<>();
-        myMap.put("filename",fileName);
-        myMap.put("path",pathFiles+fileName);
-        myMap.put("file1-Exist",Boolean.toString(file.exists()));
-
-        return ResponseEntity.ok(myMap);*/
+    }
+    @GetMapping("/animal/all/{idAnimal}")
+    public ResponseEntity<List<AnimalPublicInfo.FotosAnimalInfo>> getAllImgAnimal(@PathVariable Long idAnimal) {
+        return ResponseEntity.ok(fotoAnimalRepository.findAllByAnimalId(idAnimal));
     }
 }

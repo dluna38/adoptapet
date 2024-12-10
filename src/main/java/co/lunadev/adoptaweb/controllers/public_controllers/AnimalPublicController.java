@@ -29,7 +29,6 @@ public class AnimalPublicController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-
     public List<AnimalPublicInfo> getAnimalAdoptables() {
         return animalRepository.findAllByHabilitadoAdopcion(true);
     }

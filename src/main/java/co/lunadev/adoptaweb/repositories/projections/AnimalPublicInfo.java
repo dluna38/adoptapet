@@ -28,7 +28,7 @@ public interface AnimalPublicInfo {
 
    FotosAnimalInfo getFotoPortada();
 
-    //RefugioInfo getRefugio();
+    RefugioInfo getRefugio();
 
     Raza getRaza();
 

@@ -46,3 +46,6 @@ src/resources/images/fotos_registro/
 src/resources/templates/mail/
 *.http
 *.ftlh
+*.jpg
+*.jpeg
+*.png

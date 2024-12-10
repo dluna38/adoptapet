@@ -21,10 +21,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Log
-public class FileUtils {
+public class UtilFile {
 
     private static final short maxSaveTrys= 2;
-    private FileUtils() {
+    private UtilFile() {
     }
 
     public static String getRandomName(){
@@ -137,14 +137,14 @@ public class FileUtils {
     public static List<BaseArchivo> saveFilesFromRequest(List<MultipartFile> files, String path){
         List<BaseArchivo> archivos = new ArrayList<>();
         for (MultipartFile file : files) {
-            if (!FileUtils.fileIsImage(file)) {
+            if (!UtilFile.fileIsImage(file)) {
                 throw new ValidationException("archivo", "no es una imagen");
             }
-            String pathFileSaved = FileUtils.saveFile(path, file);
+            String pathFileSaved = UtilFile.saveFile(path, file);
             if (pathFileSaved.isEmpty()) {
                 throw new UnknownException("No se pudo procesar los archivos");
             }
-            archivos.add(new BaseArchivo(pathFileSaved,FileUtils.getFileNameFromPath(pathFileSaved), file.getOriginalFilename()));
+            archivos.add(new BaseArchivo(pathFileSaved, UtilFile.getFileNameFromPath(pathFileSaved), file.getOriginalFilename()));
         }
         return archivos;
     }

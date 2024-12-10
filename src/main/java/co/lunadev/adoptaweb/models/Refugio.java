@@ -18,7 +18,6 @@ public class Refugio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @OneToOne(mappedBy = "refugio")
     @ToString.Exclude
     private User usuario;
@@ -38,7 +37,10 @@ public class Refugio {
 
     @ColumnDefault("0")
     private Boolean verificado;
-
+    @ColumnDefault("1")
+    private Boolean habilitado;
+    @Column(unique = true,length = 35)
+    private String slug;
     @ManyToOne(fetch = FetchType.LAZY)
     @ToString.Exclude
     private Municipio ubicacionMunicipio;

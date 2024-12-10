@@ -1,5 +1,6 @@
 package co.lunadev.adoptaweb.utils;
 
+import java.text.Normalizer;
 import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -18,8 +19,7 @@ public class UtilString {
     }
 
     public static boolean isStringEmpty(String cadena) {
-        cadena = cadena.trim();
-        return cadena.isEmpty() || cadena.isBlank();
+        return cadena.trim().isBlank();
     }
 
     public static boolean stringIsEmptyOrNull(String cadena) {
@@ -43,6 +43,22 @@ public class UtilString {
         } catch (Exception e) {
             return "";
         }
+    }
+
+    public static String makeSlug(String cadena,int maxLength){
+        // Normalize the string to decompose accented characters
+        String normalized = Normalizer.normalize(cadena.trim().toLowerCase(), Normalizer.Form.NFD);
+
+        // Remove accents and special characters
+        String stripped = normalized.replaceAll("[^\\p{L}\\p{N}\\s]+", "");
+        stripped = stripped.replaceAll("\\s+", "-");
+
+        if(stripped.length() > maxLength){
+            stripped = stripped.substring(0, maxLength);
+        }
+        // Replace spaces and multiple hyphens with single hyphens
+        return stripped;
+
     }
 
 }
