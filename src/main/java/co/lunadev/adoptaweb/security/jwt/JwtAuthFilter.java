@@ -2,10 +2,13 @@ package co.lunadev.adoptaweb.security.jwt;
 
 import co.lunadev.adoptaweb.exceptions.ResourceNotFoundException;
 import co.lunadev.adoptaweb.repositories.UserRepository;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.java.Log;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,6 +24,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
+@Log
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
@@ -53,9 +57,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 setSecurityContextWithUserDetails(request, userDetails);
             }
             filterChain.doFilter(request, response);
-        } catch (Exception e) {
+        }catch (JwtException e) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            response.getWriter().write("BAD AUTHORIZATION");
+            response.getWriter().write("BAD JWT");
         }
     }
 

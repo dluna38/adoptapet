@@ -5,6 +5,7 @@ import co.lunadev.adoptaweb.models.HistoriaClinica;
 import co.lunadev.adoptaweb.models.Raza;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Null;
 import jakarta.validation.constraints.Past;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,38 +14,39 @@ import java.util.List;
 
 public class UpdateAnimalRequest {
     @NotBlank
+    @Null
     private String nombre;
     @NotBlank
+    @Null
     private String color;
-    @NotNull
+    @Null
     private Animal.Tamano tamano;
     //solo contar el mes y año
     @Past
-    @NotNull
+    @Null
     private LocalDate fechaNacimiento;
-    @NotNull
+    @Null
     private boolean habilitadoAdopcion;
-    @NotNull
+    @Null
     private boolean tieneChip;
+    @Null
     private String chipCode;
-    @NotNull
+    @Null
     private String descripcion;
-    @NotNull
+    @Null
     private Raza raza;
-    private List<MultipartFile> fotos;
-
-    @NotNull
+    @Null
     private boolean estaEsterilizado;
-    @NotNull
+    @Null
     private boolean estaVacunado;
 
-    @NotNull
+    @Null
     private HistoriaClinica.EstadoGeneralAnimal estadoGeneral;
-    @NotNull
+    @Null
     private HistoriaClinica.CondicionMedicaAnimal condicionMedica;
-    @NotNull
+    @Null
     private HistoriaClinica.NecesidadEspecialAnimal necesidadesEspeciales;
-    @NotNull
+    @Null
     private HistoriaClinica.ComportamientoAnimal comportamiento;
     private String observaciones;
     private String vacunas;

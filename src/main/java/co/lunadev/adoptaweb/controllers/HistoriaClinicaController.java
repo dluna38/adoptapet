@@ -1,5 +1,6 @@
 package co.lunadev.adoptaweb.controllers;
 
+import co.lunadev.adoptaweb.controllers.dto_requests.EnumDto;
 import co.lunadev.adoptaweb.controllers.response.EstadosClinica;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +20,7 @@ public class HistoriaClinicaController {
 
     }
     @GetMapping("/estados")
-    public ResponseEntity<Map<String, Map<String, Integer>>> getEstadosHistoriaClinica() {
-        return ResponseEntity.ok(EstadosClinica.getInfo2());
+    public ResponseEntity<Map<String,List<EnumDto>>> getEstadosHistoriaClinica() {
+        return ResponseEntity.ok(EstadosClinica.getEstadosClinica());
     }
 }

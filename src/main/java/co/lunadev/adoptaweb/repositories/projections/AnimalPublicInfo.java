@@ -4,6 +4,9 @@ import co.lunadev.adoptaweb.models.Animal;
 import co.lunadev.adoptaweb.models.HistoriaClinica;
 import co.lunadev.adoptaweb.models.Raza;
 import co.lunadev.adoptaweb.models.archivos.FotoAnimal;
+import co.lunadev.adoptaweb.models.serializers.TamanoSerializer;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -15,7 +18,7 @@ public interface AnimalPublicInfo {
     String getNombre();
 
     String getColor();
-
+    @JsonSerialize(using = TamanoSerializer.class)
     Animal.Tamano getTamano();
 
     LocalDate getFechaNacimiento();
@@ -30,7 +33,7 @@ public interface AnimalPublicInfo {
 
     RefugioInfo getRefugio();
 
-    Raza getRaza();
+    RazaInfo getRaza();
 
     /**
      * Projection for {@link co.lunadev.adoptaweb.models.HistoriaClinica}
@@ -57,6 +60,7 @@ public interface AnimalPublicInfo {
      * Projection for {@link FotoAnimal}
      */
     interface FotosAnimalInfo {
+        @JsonProperty("img")
         String getNombreInterno();
     }
 
@@ -65,5 +69,13 @@ public interface AnimalPublicInfo {
      */
     interface RefugioInfo {
         String getNombreRefugio();
+    }
+
+    interface RazaInfo {
+        String getNombre();
+        EspecieInfo getEspecie();
+    }
+    interface EspecieInfo {
+        String getNombre();
     }
 }

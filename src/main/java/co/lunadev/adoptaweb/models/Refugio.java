@@ -47,7 +47,7 @@ public class Refugio {
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "refugio")
     @ToString.Exclude
     private List<AnuncioRefugio> anuncios;
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "refugio")
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "refugio",orphanRemoval = true)
     @ToString.Exclude
     private List<Animal> animales;
 

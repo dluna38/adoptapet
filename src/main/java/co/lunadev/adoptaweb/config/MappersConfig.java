@@ -1,5 +1,6 @@
 package co.lunadev.adoptaweb.config;
 
+import co.lunadev.adoptaweb.models.serializers.TamanoSerializer;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.datatype.hibernate6.Hibernate6Module;
 import org.springframework.context.annotation.Bean;

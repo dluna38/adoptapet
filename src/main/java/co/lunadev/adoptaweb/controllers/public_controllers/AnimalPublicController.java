@@ -1,19 +1,18 @@
 package co.lunadev.adoptaweb.controllers.public_controllers;
 
+import co.lunadev.adoptaweb.controllers.response.PageResponse;
+import co.lunadev.adoptaweb.models.Animal;
 import co.lunadev.adoptaweb.repositories.AnimalRepository;
 import co.lunadev.adoptaweb.repositories.projections.AnimalPublicInfo;
+import co.lunadev.adoptaweb.repositories.specifications.AnimalSpecification;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/public/animal")
@@ -29,7 +28,12 @@ public class AnimalPublicController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<AnimalPublicInfo> getAnimalAdoptables() {
-        return animalRepository.findAllByHabilitadoAdopcion(true);
+    public PageResponse<Animal> getAnimalAdoptables(@RequestParam(required = false) Map<String, String> requestParams) {
+        PageRequest pageable = PageRequest.of(0, 20);
+        pageable.withSort(Sort.Direction.DESC,"createdAt");
+        return new PageResponse<>(animalRepository.findAll(
+                AnimalSpecification.animalSpecificationParamsPublicAllAnimal(requestParams)
+                        .and(AnimalSpecification.withHabilitadoAdopcion(true)),
+                pageable));
     }
 }

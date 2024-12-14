@@ -74,10 +74,10 @@ public class ControllersExceptionHandler {
     public ResponseEntity<Object> maxUploadSizeExceededExceptionResponse(MaxUploadSizeExceededException ex) {
         return new ValidationException("archivo","Demasiado grande, maximo: 2mb").generateResponse();
     }
-    @ExceptionHandler(ConstraintViolationException.class)
+    /*@ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Object> constraintViolationExceptionResponse(ConstraintViolationException ex) {
         return new ValidationException("contrain","fallo").generateResponse();
-    }
+    }*/
     /* @ExceptionHandler(SqlEx.class)
     public ResponseEntity<Object> sqlExceptionResponse(PSQLException ex){
         return new DatabaseHandleExceptions(ex).generateResponse();

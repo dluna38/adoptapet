@@ -1,6 +1,7 @@
 package co.lunadev.adoptaweb.models.archivos;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ public class BaseArchivo {
     private Long id;
     //TODO agregar ubicacion = ruta, nombreIterno solo nomber, agregar tipo??
     private String path;
+    @JsonProperty("nombre")
     private String nombreInterno;
     private String nombreOriginalFoto;
     @CreationTimestamp
