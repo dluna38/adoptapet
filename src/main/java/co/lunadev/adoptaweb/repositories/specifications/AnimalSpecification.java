@@ -52,12 +52,25 @@ public class AnimalSpecification {
             }
         }
     }
-    public static Specification<Animal> withHabilitadoAdopcion(Boolean habilitado) {
+
+    public static Specification<Animal> habilitadoAdopcion(Boolean habilitado) {
         return ((root, query, cBuilder) ->
                 cBuilder.and(cBuilder.equal(root.get("habilitadoAdopcion"), habilitado)));
     }
+
     public static Specification<Animal> filterByRefugioId(Long idRefugio) {
         return ((root, query, cBuilder) ->
                 cBuilder.and(cBuilder.equal(root.get("refugio").get("id"), idRefugio)));
+    }
+
+    public static Specification<Animal> withRelations() {
+        return ((root, query, cBuilder) -> {
+            root.fetch("historiaClinica", JoinType.INNER);
+            root.fetch("raza", JoinType.INNER).fetch("especie", JoinType.LEFT);
+            root.fetch("refugio", JoinType.INNER);
+            root.fetch("fotoPortada", JoinType.LEFT);
+            return cBuilder.conjunction();
+        }
+        );
     }
 }

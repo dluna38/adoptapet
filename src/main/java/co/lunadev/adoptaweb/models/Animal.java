@@ -47,6 +47,7 @@ public class Animal {
     private String descripcion;
     @OneToOne(optional = false,fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @ToString.Exclude
+    @JoinColumn(name = "historia_clinica_id")
     private HistoriaClinica historiaClinica;
 
     @ManyToOne(optional = false,fetch = FetchType.LAZY)

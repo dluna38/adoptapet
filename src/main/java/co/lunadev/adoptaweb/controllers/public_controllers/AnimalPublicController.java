@@ -1,14 +1,11 @@
 package co.lunadev.adoptaweb.controllers.public_controllers;
 
 import co.lunadev.adoptaweb.controllers.response.PageResponse;
-import co.lunadev.adoptaweb.models.Animal;
 import co.lunadev.adoptaweb.models.AnimalPublicDto;
 import co.lunadev.adoptaweb.models.mappers.AnimalPublicMapper;
 import co.lunadev.adoptaweb.repositories.AnimalRepository;
-import co.lunadev.adoptaweb.repositories.projections.AnimalPublicInfo;
 import co.lunadev.adoptaweb.repositories.specifications.AnimalSpecification;
 import co.lunadev.adoptaweb.utils.UtilPage;
-import jakarta.persistence.EntityManager;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -34,9 +31,11 @@ public class AnimalPublicController {
     @ResponseStatus(HttpStatus.OK)
     public PageResponse<AnimalPublicDto> getAnimalAdoptables(@RequestParam(required = false) Map<String, String> requestParams) {
         PageRequest pageable = UtilPage.paramsToPageRequest(requestParams).withSort(Sort.Direction.DESC,"createdAt");
+        animalRepository.findAllWithHistoriaClinica(true, pageable);
+        System.out.println("---------------------------------");
         return new PageResponse<>( animalRepository.findAll(
                 AnimalSpecification.animalSpecificationParamsPublicAllAnimal(requestParams)
-                        .and(AnimalSpecification.withHabilitadoAdopcion(true)),
+                        .and(AnimalSpecification.habilitadoAdopcion(true).and(AnimalSpecification.withRelations())),
                 pageable).map(animalPublicMapper::toDto));
     }
 }
