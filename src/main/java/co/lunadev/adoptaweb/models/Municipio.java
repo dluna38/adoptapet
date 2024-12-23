@@ -1,12 +1,12 @@
 package co.lunadev.adoptaweb.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class Municipio {
@@ -17,4 +17,5 @@ public class Municipio {
     private String codPostal;
     @ManyToOne
     private Departamento departamento;
+
 }

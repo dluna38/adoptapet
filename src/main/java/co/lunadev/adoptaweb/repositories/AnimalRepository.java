@@ -7,10 +7,7 @@ import co.lunadev.adoptaweb.repositories.projections.AnimalWithRefugio;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,8 +18,8 @@ public interface AnimalRepository extends JpaRepository<Animal, Long>, JpaSpecif
 
     boolean existsAnimalById(Long animalId);
 
-    //TODO add pageable
     //@Query("select a from Animal a join fetch a.fotoPortada join fetch a.historiaClinica join fetch a.refugio join fetch a.raza ar join fetch ar.especie")
+    @EntityGraph(attributePaths = {"raza.especie", "refugio", "historiaClinica", "fotoPortada"})
     Page<Animal> findAll(Specification<Animal> spec, Pageable pageable);
 
     @Transactional

@@ -108,7 +108,7 @@ public class HistoriaClinica {
     }
     @Getter
     public enum NecesidadEspecialAnimal implements EnumBase{
-        NINGUNA("ninguna","Animal que no requiere cuidados especiales."),
+        NINGUNA("Ninguna","Animal que no requiere cuidados especiales."),
         DIETA_ESPECIAL("Dieta especial","Requiere una dieta específica por razones médicas."),
         MEDICADO("Medicado","Requiere administración regular de medicamentos."),
         CONFINAMIENTO("Confinamiento","Debe ser mantenido aislado por razones médicas o de comportamiento."),

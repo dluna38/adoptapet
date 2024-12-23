@@ -29,7 +29,7 @@ public interface AnimalPublicInfo {
 
     HistoriaClinicaInfo getHistoriaClinica();
 
-   FotosAnimalInfo getFotoPortada();
+    FotosAnimalInfo getFotoPortada();
 
     RefugioInfo getRefugio();
 

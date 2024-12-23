@@ -1,6 +1,6 @@
 package co.lunadev.adoptaweb.controllers;
 
-public class AnunciosRefugio {
+public class AnunciosRefugioController {
 
     public void newAnuncio() {
 
