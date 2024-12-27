@@ -31,6 +31,8 @@ public class Animal {
     private String nombre;
     @NotBlank
     private String color;
+    @Enumerated(EnumType.STRING)
+    private Sexo sexo;
     @Enumerated
     @JsonSerialize(using = TamanoSerializer.class)
     private Tamano tamano;
@@ -85,5 +87,22 @@ public class Animal {
         }
 
     }
+    public enum Sexo implements EnumBase{
+        M("Macho"),H("Hembra");
 
+        final String normalName;
+        Sexo(String normalName) {
+            this.normalName = normalName;
+        }
+
+        @Override
+        public String normalName() {
+            return this.normalName;
+        }
+
+        @Override
+        public String getDescripcion() {
+            return "";
+        }
+    }
 }

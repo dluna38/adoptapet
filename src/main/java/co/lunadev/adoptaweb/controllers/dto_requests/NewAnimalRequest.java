@@ -25,6 +25,8 @@ public class NewAnimalRequest {
     private String color;
     @NotNull
     private Animal.Tamano tamano;
+    @NotNull
+    private Animal.Sexo sexo;
     //solo contar el mes y año
     @Past
     @NotNull

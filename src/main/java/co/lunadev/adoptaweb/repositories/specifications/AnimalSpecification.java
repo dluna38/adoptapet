@@ -67,8 +67,11 @@ public class AnimalSpecification {
         return ((root, query, cBuilder) -> {
             root.fetch("historiaClinica", JoinType.INNER);
             root.fetch("raza", JoinType.INNER).fetch("especie", JoinType.LEFT);
-            root.fetch("refugio", JoinType.INNER);
+            root.fetch("refugio", JoinType.INNER).
+                    fetch("ubicacionMunicipio", JoinType.INNER).
+                    fetch("departamento", JoinType.INNER);
             root.fetch("fotoPortada", JoinType.LEFT);
+
             return cBuilder.conjunction();
         }
         );

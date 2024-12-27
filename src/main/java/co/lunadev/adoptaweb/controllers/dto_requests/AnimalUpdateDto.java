@@ -26,6 +26,7 @@ public class AnimalUpdateDto implements Serializable {
     @NullOrNotBlank
     private String color;
 
+    private Animal.Sexo sexo;
     private Animal.Tamano tamano;
 
     private LocalDate fechaNacimiento;

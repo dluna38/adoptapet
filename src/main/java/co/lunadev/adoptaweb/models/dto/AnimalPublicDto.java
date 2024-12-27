@@ -1,11 +1,11 @@
-package co.lunadev.adoptaweb.models;
+package co.lunadev.adoptaweb.models.dto;
 
+import co.lunadev.adoptaweb.models.*;
 import co.lunadev.adoptaweb.models.serializers.EnumBaseSerializer;
 import co.lunadev.adoptaweb.models.serializers.TamanoSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -32,6 +32,8 @@ public class AnimalPublicDto implements Serializable {
     private String color;
     @JsonSerialize(using = TamanoSerializer.class)
     private Animal.Tamano tamano;
+    @JsonSerialize(using = EnumBaseSerializer.class)
+    private Animal.Sexo sexo;
     @NotNull
     private LocalDate fechaNacimiento;
     private Boolean tieneChip;
@@ -41,7 +43,7 @@ public class AnimalPublicDto implements Serializable {
     private AnimalPublicDto.RazaDto raza;
 
     private FotoAnimalDto fotoPortada;
-    private RefugioDto refugio;
+    private RefugioAnimalDto refugio;
     private LocalDateTime updatedAt;
 
     /**
@@ -124,9 +126,10 @@ public class AnimalPublicDto implements Serializable {
     @ToString
     @Accessors(chain = true)
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class RefugioDto implements Serializable {
+    public static class RefugioAnimalDto implements Serializable {
         @NotBlank
         private String nombreRefugio;
         private String slug;
+        private MunicipioPublicDto municipio;
     }
 }

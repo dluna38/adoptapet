@@ -1,4 +1,4 @@
-package co.lunadev.adoptaweb.controllers;
+package co.lunadev.adoptaweb.controllers.public_controllers;
 
 import co.lunadev.adoptaweb.exceptions.ResourceNotFoundException;
 import co.lunadev.adoptaweb.models.archivos.FotoAnimal;
@@ -16,7 +16,7 @@ import java.io.File;
 import java.util.List;
 
 @RestController
-@RequestMapping("/img")
+@RequestMapping("/public/img")
 public class ImageController {
 
     FotoAnimalRepository fotoAnimalRepository;
@@ -40,7 +40,7 @@ public class ImageController {
         }
     }
     @GetMapping("/animal/all/{idAnimal}")
-    public ResponseEntity<List<AnimalPublicInfo.FotosAnimalInfo>> getAllImgAnimal(@PathVariable Long idAnimal) {
+    public ResponseEntity<List<AnimalPublicInfo.FotosAnimalInfo>> getAllImgsAnimal(@PathVariable Long idAnimal) {
         return ResponseEntity.ok(fotoAnimalRepository.findAllByAnimalId(idAnimal));
     }
 }

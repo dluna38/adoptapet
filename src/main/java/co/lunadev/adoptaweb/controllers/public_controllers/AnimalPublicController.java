@@ -1,7 +1,7 @@
 package co.lunadev.adoptaweb.controllers.public_controllers;
 
 import co.lunadev.adoptaweb.controllers.response.PageResponse;
-import co.lunadev.adoptaweb.models.AnimalPublicDto;
+import co.lunadev.adoptaweb.models.dto.AnimalPublicDto;
 import co.lunadev.adoptaweb.models.mappers.AnimalPublicMapper;
 import co.lunadev.adoptaweb.repositories.AnimalRepository;
 import co.lunadev.adoptaweb.repositories.specifications.AnimalSpecification;
