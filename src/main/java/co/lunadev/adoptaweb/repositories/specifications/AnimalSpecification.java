@@ -75,15 +75,15 @@ public class AnimalSpecification {
 
     public static Specification<Animal> withRelations() {
         return ((root, query, cBuilder) -> {
-            root.fetch("historiaClinica", JoinType.LEFT);
-            root.fetch("raza", JoinType.LEFT).fetch("especie", JoinType.LEFT);
-            root.fetch("refugio", JoinType.LEFT).
-                    fetch("ubicacionMunicipio", JoinType.LEFT).
-                    fetch("departamento", JoinType.LEFT);
+            root.fetch("historiaClinica", JoinType.INNER);
+            root.fetch("raza", JoinType.INNER).fetch("especie", JoinType.INNER);
+            root.fetch("refugio", JoinType.INNER).
+                    fetch("ubicacionMunicipio", JoinType.INNER).
+                    fetch("departamento", JoinType.INNER);
             root.fetch("fotoPortada", JoinType.LEFT);
-            query.distinct(true);
-            return cBuilder.conjunction();
-            //return null;
+            //query.distinct(true);
+            //return cBuilder.conjunction();
+            return null;
         }
         );
     }

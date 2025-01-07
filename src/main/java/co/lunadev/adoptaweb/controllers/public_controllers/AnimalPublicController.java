@@ -4,6 +4,7 @@ import co.lunadev.adoptaweb.controllers.response.PageResponse;
 import co.lunadev.adoptaweb.models.dto.AnimalPublicDto;
 import co.lunadev.adoptaweb.models.mappers.AnimalPublicMapper;
 import co.lunadev.adoptaweb.repositories.AnimalRepository;
+import co.lunadev.adoptaweb.repositories.custom.AnimalCustomRepository;
 import co.lunadev.adoptaweb.repositories.specifications.AnimalSpecification;
 import co.lunadev.adoptaweb.utils.UtilPage;
 
@@ -19,11 +20,13 @@ import java.util.Map;
 public class AnimalPublicController {
 
     private final AnimalRepository animalRepository;
+    private final AnimalCustomRepository animalCustomRepository;
     private final AnimalPublicMapper animalPublicMapper;
 
-    public AnimalPublicController(AnimalRepository animalRepository,
+    public AnimalPublicController(AnimalRepository animalRepository, AnimalCustomRepository animalCustomRepository,
                                   AnimalPublicMapper animalPublicMapper) {
         this.animalRepository = animalRepository;
+        this.animalCustomRepository = animalCustomRepository;
         this.animalPublicMapper = animalPublicMapper;
     }
 
@@ -32,10 +35,9 @@ public class AnimalPublicController {
     public PageResponse<AnimalPublicDto> getAnimalAdoptables(@RequestParam(required = false) Map<String, String> requestParams) {
         PageRequest pageable = UtilPage.paramsToPageRequest(requestParams).withSort(Sort.Direction.DESC,"createdAt");
         //animalRepository.findAllWithHistoriaClinica(true, pageable);
-        return new PageResponse<>( animalRepository.findAll(
-                AnimalSpecification.animalSpecificationParamsPublicAllAnimal(requestParams)
-                        .and(AnimalSpecification.habilitadoAdopcion(true)
-                                .and(AnimalSpecification.withRelations())),
-                pageable).map(animalPublicMapper::toDto));
+        return new PageResponse<>(animalCustomRepository.findAllCustom(AnimalSpecification.animalSpecificationParamsPublicAllAnimal(requestParams)
+                .and(AnimalSpecification.habilitadoAdopcion(true)
+                        .and(AnimalSpecification.withRelations())),pageable).map(animalPublicMapper::toDto));
     }
+
 }
