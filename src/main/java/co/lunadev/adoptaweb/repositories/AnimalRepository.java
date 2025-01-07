@@ -19,8 +19,10 @@ public interface AnimalRepository extends JpaRepository<Animal, Long>, JpaSpecif
 
     boolean existsAnimalById(Long animalId);
 
-    //@Query("select a from Animal a join fetch a.fotoPortada join fetch a.historiaClinica join fetch a.refugio join fetch a.raza ar join fetch ar.especie")
-    //@EntityGraph(attributePaths = {"historiaClinica","raza.especie", "refugio","fotoPortada"})
+    //cant be use with specification
+    //@Query("select a from Animal a join fetch a.fotoPortada join fetch a.historiaClinica join fetch a.refugio ref join fetch ref.ubicacionMunicipio mun join fetch mun.departamento join fetch a.raza ar join fetch ar.especie")
+    //too many querys
+    //@EntityGraph(attributePaths = {"raza.especie", "refugio.ubicacionMunicipio.departamento", "historiaClinica", "fotoPortada"})
     Page<Animal> findAll(Specification<Animal> spec, Pageable pageable);
 
     @Query("SELECT a FROM Animal a JOIN FETCH a.historiaClinica WHERE a.habilitadoAdopcion = :habilitado ORDER BY a.createdAt DESC")

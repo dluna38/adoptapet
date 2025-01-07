@@ -15,7 +15,7 @@ public class Municipio {
     private Short id;
     private String nombre;
     private String codPostal;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Departamento departamento;
 
 }

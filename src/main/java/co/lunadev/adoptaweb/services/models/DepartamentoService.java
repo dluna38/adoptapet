@@ -2,6 +2,7 @@ package co.lunadev.adoptaweb.services.models;
 
 import co.lunadev.adoptaweb.models.Departamento;
 import co.lunadev.adoptaweb.repositories.DepartamentoRepository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,8 +14,8 @@ public class DepartamentoService {
     public DepartamentoService(DepartamentoRepository departamentoRepository) {
         this.departamentoRepository = departamentoRepository;
     }
-
-    public List<Departamento> findAll() {
+    @Cacheable(value = "cacheForLong")
+    public List<Departamento> findAllDepartamentos() {
         return departamentoRepository.findAll();
     }
 }

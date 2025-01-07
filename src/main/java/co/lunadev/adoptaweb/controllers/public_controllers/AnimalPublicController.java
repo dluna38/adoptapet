@@ -31,11 +31,11 @@ public class AnimalPublicController {
     @ResponseStatus(HttpStatus.OK)
     public PageResponse<AnimalPublicDto> getAnimalAdoptables(@RequestParam(required = false) Map<String, String> requestParams) {
         PageRequest pageable = UtilPage.paramsToPageRequest(requestParams).withSort(Sort.Direction.DESC,"createdAt");
-        animalRepository.findAllWithHistoriaClinica(true, pageable);
-        System.out.println("---------------------------------");
+        //animalRepository.findAllWithHistoriaClinica(true, pageable);
         return new PageResponse<>( animalRepository.findAll(
                 AnimalSpecification.animalSpecificationParamsPublicAllAnimal(requestParams)
-                        .and(AnimalSpecification.habilitadoAdopcion(true).and(AnimalSpecification.withRelations())),
+                        .and(AnimalSpecification.habilitadoAdopcion(true)
+                                .and(AnimalSpecification.withRelations())),
                 pageable).map(animalPublicMapper::toDto));
     }
 }

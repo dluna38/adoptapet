@@ -13,10 +13,12 @@ public class PageResponse<T> {
     private int paginaActual;
     private int paginasTotales;
     private int tamano;
+    private Long totalElements;
     public PageResponse(Page<T> page) {
         this.contenido=page.getContent();
         this.paginaActual=page.getNumber();
         this.paginasTotales=page.getTotalPages();
         this.tamano=page.getSize();
+        this.totalElements=page.getTotalElements();
     }
 }

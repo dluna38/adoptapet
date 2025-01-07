@@ -20,6 +20,7 @@ public class BaseDataPublicController {
 
     @GetMapping("/filters/animal")
     public FilterAnimal getFiltersAnimal(){
-        return new FilterAnimal(departamentoService.findAll(),especieService.getAllEspecies());
+        return new FilterAnimal(departamentoService.findAllDepartamentos(),especieService.getAllEspecies());
     }
+
 }

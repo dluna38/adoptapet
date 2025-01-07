@@ -1,5 +1,6 @@
 package co.lunadev.adoptaweb.repositories.specifications;
 
+import co.lunadev.adoptaweb.exceptions.ValidationException;
 import co.lunadev.adoptaweb.models.Animal;
 import co.lunadev.adoptaweb.models.Raza;
 import co.lunadev.adoptaweb.models.Refugio;
@@ -37,7 +38,16 @@ public class AnimalSpecification {
                 Join<Animal, Raza> razaJoin = root.join("raza", JoinType.INNER);
                 return cBuilder.equal(razaJoin.get("especie").get("id"), especieId);
             });
-
+            //considerar cambiar a una key de refugio numerica??
+            addPredicateIfValid(params, "refugio", predicates, cBuilder, value -> {
+                if(value.length() > 35){
+                    throw new ValidationException("slug muy largo");
+                }
+                System.out.println("entro");
+                Join<Animal, Refugio> refugioJoin = root.join("refugio", JoinType.INNER);
+                return cBuilder.equal(refugioJoin.get("slug"), value);
+            });
+            query.distinct(true);
             return cBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
@@ -65,14 +75,15 @@ public class AnimalSpecification {
 
     public static Specification<Animal> withRelations() {
         return ((root, query, cBuilder) -> {
-            root.fetch("historiaClinica", JoinType.INNER);
-            root.fetch("raza", JoinType.INNER).fetch("especie", JoinType.LEFT);
-            root.fetch("refugio", JoinType.INNER).
-                    fetch("ubicacionMunicipio", JoinType.INNER).
-                    fetch("departamento", JoinType.INNER);
+            root.fetch("historiaClinica", JoinType.LEFT);
+            root.fetch("raza", JoinType.LEFT).fetch("especie", JoinType.LEFT);
+            root.fetch("refugio", JoinType.LEFT).
+                    fetch("ubicacionMunicipio", JoinType.LEFT).
+                    fetch("departamento", JoinType.LEFT);
             root.fetch("fotoPortada", JoinType.LEFT);
-
+            query.distinct(true);
             return cBuilder.conjunction();
+            //return null;
         }
         );
     }
