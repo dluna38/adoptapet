@@ -14,7 +14,7 @@ public class DepartamentoService {
     public DepartamentoService(DepartamentoRepository departamentoRepository) {
         this.departamentoRepository = departamentoRepository;
     }
-    @Cacheable(value = "cacheForLong")
+    @Cacheable(value = "cacheForLong",key = "'departamentos'")
     public List<Departamento> findAllDepartamentos() {
         return departamentoRepository.findAll();
     }

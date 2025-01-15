@@ -87,4 +87,5 @@ public class AnimalSpecification {
         }
         );
     }
+    //TODO and refugio habilitado
 }

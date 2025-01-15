@@ -34,10 +34,12 @@ public class AuthController {
         userService.registerUsuario(user);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
-
+    @GetMapping
+    public ResponseEntity<Object> checkToken(){
+        return ResponseEntity.noContent().build();
+    }
     @GetMapping("/test")
     public ResponseEntity<Object> test(){
-
         //dispatcherEmail.accountApprovedEmail().body("correo@corre.com","Refugio CEIBA","123").execute();
         return ResponseEntity.ok(UtilString.makeSlug("Refugio CEIBA rioñegró it's c    razy-stuff",35));
     }

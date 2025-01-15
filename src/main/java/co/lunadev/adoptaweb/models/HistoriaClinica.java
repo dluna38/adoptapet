@@ -1,6 +1,8 @@
 package co.lunadev.adoptaweb.models;
 
 import co.lunadev.adoptaweb.models.serializers.EstadoGeneralAnimalSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import lombok.*;
@@ -16,7 +18,7 @@ public class HistoriaClinica {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne(mappedBy = "historiaClinica",optional = false)
+    @OneToOne(mappedBy = "historiaClinica")
     private Animal animal;
     @ColumnDefault("0")
     @Column(nullable = false)
@@ -70,7 +72,7 @@ public class HistoriaClinica {
     public enum CondicionMedicaAnimal implements EnumBase{
         SANO("Sano","Sin enfermedades diagnosticadas."),
         ENFERMEDAD_CRONICA("Enfermedad Crónica","Enfermedad de larga duración (diabetes, enfermedad renal, etc.)."),
-        ENFERMEDAD_AGUDA("Enfermedad Crónica","Enfermedad de reciente aparición (infección respiratoria, gastroenteritis, etc.)."),
+        ENFERMEDAD_AGUDA("Enfermedad Aguda","Enfermedad de reciente aparición (infección respiratoria, gastroenteritis, etc.)."),
         LESION("Lesión","Heridas, fracturas, etc."),
         PARASITOSIS("Parasitosis","Presencia de parásitos internos o externos."),
         OTRA("Otra","Especificar cualquier otra condición médica relevante (enfermedades de la piel, problemas dentales, etc.).");

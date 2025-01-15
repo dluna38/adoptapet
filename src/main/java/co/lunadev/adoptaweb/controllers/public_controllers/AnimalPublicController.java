@@ -35,7 +35,8 @@ public class AnimalPublicController {
     public PageResponse<AnimalPublicDto> getAnimalAdoptables(@RequestParam(required = false) Map<String, String> requestParams) {
         PageRequest pageable = UtilPage.paramsToPageRequest(requestParams).withSort(Sort.Direction.DESC,"createdAt");
         //animalRepository.findAllWithHistoriaClinica(true, pageable);
-        return new PageResponse<>(animalCustomRepository.findAllCustom(AnimalSpecification.animalSpecificationParamsPublicAllAnimal(requestParams)
+        return new PageResponse<>(animalCustomRepository.findAllCustom(
+                AnimalSpecification.animalSpecificationParamsPublicAllAnimal(requestParams)
                 .and(AnimalSpecification.habilitadoAdopcion(true)
                         .and(AnimalSpecification.withRelations())),pageable).map(animalPublicMapper::toDto));
     }

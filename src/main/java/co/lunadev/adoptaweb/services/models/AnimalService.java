@@ -1,5 +1,6 @@
 package co.lunadev.adoptaweb.services.models;
 
+import co.lunadev.adoptaweb.controllers.AnimalController;
 import co.lunadev.adoptaweb.controllers.dto_requests.AnimalUpdateDto;
 import co.lunadev.adoptaweb.controllers.dto_requests.NewAnimalRequest;
 import co.lunadev.adoptaweb.exceptions.FieldRequiredException;
@@ -20,9 +21,11 @@ import jakarta.validation.Valid;
 import lombok.extern.java.Log;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
 
 
@@ -63,7 +66,7 @@ public class AnimalService {
         }
         try {
             //newAnimal.setRefugio(new Refugio(user.getRefugio));
-            historiaClinicaRepository.save(historiaClinica);
+            //historiaClinicaRepository.save(historiaClinica);
             newAnimal.setHistoriaClinica(historiaClinica);
             newAnimal.setRefugio(user.getRefugio());
             newAnimal.setFotos(UtilFile.saveFilesFromRequest(animalRequest.getFotos(), FotoAnimal.DIRECTORY_PATH)
@@ -107,5 +110,13 @@ public class AnimalService {
     public Page<Animal> findAllAnimalesAdoptablesByRefugioId(Long refugioId, Pageable pageable) {
         return animalRepository.findAll(AnimalSpecification.habilitadoAdopcion(true)
                 .and(AnimalSpecification.filterByRefugioId(refugioId).and(AnimalSpecification.withRelations())),pageable);
+    }
+
+    public Page<Animal> findAll(Specification<Animal> specs, Pageable pageable) {
+        return animalRepository.findAll(specs, pageable);
+    }
+
+    public void getDetailAnimal(Long idAnimal) {
+
     }
 }
