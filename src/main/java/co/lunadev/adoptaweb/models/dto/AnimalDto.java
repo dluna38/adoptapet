@@ -38,10 +38,12 @@ public class AnimalDto implements Serializable {
     private final Boolean tieneChip;
     private final String chipCode;
     private final String descripcion;
+
     private final AnimalPublicDto.HistoriaClinicaDto historiaClinica;
     @NotNull
     private final AnimalPublicDto.RazaDto raza;
     private final AnimalPublicDto.FotoAnimalDto fotoPortada;
+
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 }

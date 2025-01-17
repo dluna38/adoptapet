@@ -40,7 +40,7 @@ public class EstadosClinica {
                         Map.Entry::getKey,
                         entry -> Arrays.stream(entry.getValue())
                                 .map(enumItem -> new EnumDto(enumItem.ordinal(), enumItem.normalName(), enumItem.getDescripcion()))
-                                .collect(Collectors.toList())));
+                                .toList()));
     }
 
     @Getter

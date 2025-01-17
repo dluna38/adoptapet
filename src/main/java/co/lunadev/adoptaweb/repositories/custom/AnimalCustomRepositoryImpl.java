@@ -17,6 +17,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class AnimalCustomRepositoryImpl implements AnimalCustomRepository{
@@ -47,6 +48,22 @@ public class AnimalCustomRepositoryImpl implements AnimalCustomRepository{
                 .getResultList();
 
         return new PageImpl<>(animals, pageable, total);
+    }
+
+    @Override
+    public Optional<Animal> findCustomById(Specification<Animal> specification, Long id) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Animal> query = cb.createQuery(Animal.class);
+        Root<Animal> root = query.from(Animal.class);
+
+        query.where(specification.toPredicate(root,query,cb));
+
+        query.select(root);
+        try {
+            return Optional.of(entityManager.createQuery(query).getSingleResult());
+        } catch (jakarta.persistence.NoResultException e) {
+            return Optional.empty(); // Return an empty Optional if no result
+        }
     }
 
 

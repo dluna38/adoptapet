@@ -71,6 +71,7 @@ public class NewAnimalRequest {
         animal.setChipCode(chipCode);
         animal.setDescripcion(descripcion);
         animal.setRaza(raza);
+        animal.setSexo(sexo);
         return animal;
     }
 

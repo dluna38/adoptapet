@@ -3,16 +3,16 @@ package co.lunadev.adoptaweb.controllers;
 import co.lunadev.adoptaweb.controllers.dto_requests.AnimalUpdateDto;
 import co.lunadev.adoptaweb.controllers.dto_requests.NewAnimalRequest;
 import co.lunadev.adoptaweb.controllers.response.PageResponse;
-import co.lunadev.adoptaweb.models.Animal;
 import co.lunadev.adoptaweb.models.User;
 import co.lunadev.adoptaweb.models.dto.AnimalDto;
-import co.lunadev.adoptaweb.models.dto.AnimalPublicDto;
+import co.lunadev.adoptaweb.models.dto.AnimalRawDto;
 import co.lunadev.adoptaweb.models.mappers.AnimalPrivateMapper;
 import co.lunadev.adoptaweb.repositories.specifications.AnimalSpecification;
 import co.lunadev.adoptaweb.services.models.AnimalService;
 import co.lunadev.adoptaweb.utils.UtilPage;
 import co.lunadev.adoptaweb.validators.NewAnimalValidator;
 import jakarta.validation.Valid;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -39,8 +39,8 @@ public class AnimalController {
         this.animalPrivateMapper = animalPrivateMapper;
     }
     @GetMapping("/{idAnimal}")
-    public void getInfoAnimal(@PathVariable Long idAnimal) {
-        animalService.getDetailAnimal(idAnimal);
+    public AnimalRawDto getInfoAnimal(@PathVariable Long idAnimal, @AuthenticationPrincipal User user) {
+        return animalService.getDetailAnimal(idAnimal,user);
     }
 
     @PostMapping
@@ -53,8 +53,8 @@ public class AnimalController {
     }
     @PutMapping("/{animalId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void editAnimal(@PathVariable Long animalId, @Valid @RequestBody AnimalUpdateDto animal, @AuthenticationPrincipal User user) {
-        animalService.update(animalId,animal,user);
+    public void editAnimal(@PathVariable Long animalId, @Valid @RequestPart(name = "datos") NewAnimalRequest animal, @AuthenticationPrincipal User user) {
+        animalService.updateWithNewAnimal(animalId,animal,user);
     }
     @DeleteMapping("/{animalId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -67,7 +67,7 @@ public class AnimalController {
     public PageResponse<AnimalDto> getAnimalAllAnimals(@RequestParam(required = false) Map<String, String> requestParams,@AuthenticationPrincipal User user) {
         PageRequest pageable = UtilPage.paramsToPageRequest(requestParams).withSort(Sort.Direction.DESC,"createdAt");
         return new PageResponse<>(animalService.findAll(AnimalSpecification.animalSpecificationParamsPublicAllAnimal(requestParams)
-                .and(AnimalSpecification.withRelations()
+                .and(AnimalSpecification.withRelations(true)
                         .and(AnimalSpecification.filterByRefugioId(user.getRefugio().getId()))), pageable).map(animalPrivateMapper::toDto));
     }
 

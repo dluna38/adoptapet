@@ -2,7 +2,6 @@ package co.lunadev.adoptaweb.repositories;
 
 import co.lunadev.adoptaweb.models.Animal;
 import co.lunadev.adoptaweb.models.archivos.FotoAnimal;
-import co.lunadev.adoptaweb.repositories.projections.AnimalPublicInfo;
 import co.lunadev.adoptaweb.repositories.projections.AnimalWithRefugio;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,4 +36,8 @@ public interface AnimalRepository extends JpaRepository<Animal, Long>, JpaSpecif
 
     @Query(value = "select a from Animal a left join fetch a.fotos join fetch a.historiaClinica where a.id=:id")
     Optional<Animal> findAnimalByIdFull(Long id);
+
+    @EntityGraph(attributePaths = {"raza.especie", "historiaClinica", "fotoPortada"})
+    Optional<Animal> findCustomById(Long id);
+
 }

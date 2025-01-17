@@ -1,12 +1,18 @@
 package co.lunadev.adoptaweb.models;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
+import org.hibernate.proxy.HibernateProxy;
 
 import java.util.List;
+import java.util.Objects;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class Especie {
 
     @Id
@@ -17,10 +23,12 @@ public class Especie {
     private String nombre;
 
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "especie")
+    @ToString.Exclude
     private List<Raza> razas;
 
     @PrePersist
     public void prePersistNombre(){
         this.nombre = this.nombre.toUpperCase();
     }
+
 }

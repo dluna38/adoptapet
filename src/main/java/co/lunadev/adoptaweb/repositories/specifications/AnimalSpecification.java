@@ -72,14 +72,19 @@ public class AnimalSpecification {
         return ((root, query, cBuilder) ->
                 cBuilder.and(cBuilder.equal(root.get("refugio").get("id"), idRefugio)));
     }
-
-    public static Specification<Animal> withRelations() {
+    public static Specification<Animal> whereId(Long id) {
+        return ((root, query, cBuilder) ->
+                cBuilder.and(cBuilder.equal(root.get("id"), id)));
+    }
+    public static Specification<Animal> withRelations(boolean withRefugio) {
         return ((root, query, cBuilder) -> {
             root.fetch("historiaClinica", JoinType.INNER);
             root.fetch("raza", JoinType.INNER).fetch("especie", JoinType.INNER);
-            root.fetch("refugio", JoinType.INNER).
-                    fetch("ubicacionMunicipio", JoinType.INNER).
-                    fetch("departamento", JoinType.INNER);
+            if(withRefugio) {
+                root.fetch("refugio", JoinType.INNER).
+                        fetch("ubicacionMunicipio", JoinType.INNER).
+                        fetch("departamento", JoinType.INNER);
+            }
             root.fetch("fotoPortada", JoinType.LEFT);
             //query.distinct(true);
             //return cBuilder.conjunction();

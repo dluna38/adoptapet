@@ -38,7 +38,7 @@ public class AnimalPublicController {
         return new PageResponse<>(animalCustomRepository.findAllCustom(
                 AnimalSpecification.animalSpecificationParamsPublicAllAnimal(requestParams)
                 .and(AnimalSpecification.habilitadoAdopcion(true)
-                        .and(AnimalSpecification.withRelations())),pageable).map(animalPublicMapper::toDto));
+                        .and(AnimalSpecification.withRelations(true))),pageable).map(animalPublicMapper::toDto));
     }
 
 }
