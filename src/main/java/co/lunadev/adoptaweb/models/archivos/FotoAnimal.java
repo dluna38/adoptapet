@@ -8,6 +8,7 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class FotoAnimal extends BaseArchivo {
 
     @ManyToOne(optional = false,fetch = FetchType.LAZY)
@@ -17,6 +18,7 @@ public class FotoAnimal extends BaseArchivo {
     private Animal animal;
 
     @Transient
+    @ToString.Exclude
     public static final short MAX_FILES = 3;
     @Transient
     public static final String DIRECTORY_PATH="src/main/resources/images/fotos_animal/";

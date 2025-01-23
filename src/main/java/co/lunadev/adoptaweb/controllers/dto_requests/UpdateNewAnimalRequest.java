@@ -3,50 +3,92 @@ package co.lunadev.adoptaweb.controllers.dto_requests;
 import co.lunadev.adoptaweb.models.Animal;
 import co.lunadev.adoptaweb.models.HistoriaClinica;
 import co.lunadev.adoptaweb.models.Raza;
+import co.lunadev.adoptaweb.models.archivos.FotoAnimal;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 import jakarta.validation.constraints.Past;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
-
+import java.util.List;
+@Getter
+@Setter
+@ToString
 public class UpdateNewAnimalRequest {
-    private Long id;
+
     @NotBlank
-    @Null
     private String nombre;
     @NotBlank
-    @Null
     private String color;
-    @Null
+    @NotNull
     private Animal.Tamano tamano;
+    @NotNull
+    private Animal.Sexo sexo;
     //solo contar el mes y año
     @Past
-    @Null
+    @NotNull
     private LocalDate fechaNacimiento;
-    @Null
+    @NotNull
     private boolean habilitadoAdopcion;
-    @Null
+    @NotNull
     private boolean tieneChip;
-    @Null
     private String chipCode;
-    @Null
+    @NotNull
     private String descripcion;
-    @Null
+    @NotNull
     private Raza raza;
-    @Null
+    private List<MultipartFile> fotos;
+
+    private FotoAnimal fotoPortada;
+    @NotNull
     private boolean estaEsterilizado;
-    @Null
+    @NotNull
     private boolean estaVacunado;
 
-    @Null
+    @NotNull
     private HistoriaClinica.EstadoGeneralAnimal estadoGeneral;
-    @Null
+    @NotNull
     private HistoriaClinica.CondicionMedicaAnimal condicionMedica;
-    @Null
+    @NotNull
     private HistoriaClinica.NecesidadEspecialAnimal necesidadesEspeciales;
-    @Null
+    @NotNull
     private HistoriaClinica.ComportamientoAnimal comportamiento;
     private String observaciones;
     private String vacunas;
     private LocalDate ultimaRevisionVeterinaria;
+
+
+    public Animal getAnimal() {
+        Animal animal = new Animal();
+        animal.setNombre(nombre);
+        animal.setColor(color);
+        animal.setTamano(tamano);
+        animal.setFechaNacimiento(fechaNacimiento);
+        animal.setHabilitadoAdopcion(habilitadoAdopcion);
+        animal.setTieneChip(tieneChip);
+        animal.setChipCode(chipCode);
+        animal.setDescripcion(descripcion);
+        animal.setRaza(raza);
+        animal.setSexo(sexo);
+        return animal;
+    }
+
+    public HistoriaClinica getHistoriaClinica() {
+        HistoriaClinica hc = new HistoriaClinica();
+        hc.setObservaciones(observaciones);
+        hc.setVacunas(vacunas);
+        hc.setEstadoGeneral(estadoGeneral);
+        hc.setCondicionMedica(condicionMedica);
+        hc.setComportamiento(comportamiento);
+        hc.setNecesidadesEspeciales(necesidadesEspeciales);
+        hc.setUltimaRevisionVeterinaria(ultimaRevisionVeterinaria);
+        hc.setEstaEsterilizado(estaEsterilizado);
+        hc.setEstaVacunado(estaVacunado);
+        return hc;
+    }
+
 }

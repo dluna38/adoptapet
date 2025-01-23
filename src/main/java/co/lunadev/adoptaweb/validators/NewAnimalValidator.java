@@ -2,6 +2,7 @@ package co.lunadev.adoptaweb.validators;
 
 import co.lunadev.adoptaweb.controllers.dto_requests.NewAnimalRequest;
 import co.lunadev.adoptaweb.controllers.dto_requests.NewPeticionRegistroRequest;
+import co.lunadev.adoptaweb.controllers.dto_requests.UpdateAnimalRequest;
 import co.lunadev.adoptaweb.models.Animal;
 import co.lunadev.adoptaweb.repositories.MunicipioRepository;
 import co.lunadev.adoptaweb.repositories.RazaRepository;
@@ -23,7 +24,7 @@ public class NewAnimalValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return NewAnimalRequest.class.equals(clazz);
+        return NewAnimalRequest.class.equals(clazz) || UpdateAnimalRequest.class.equals(clazz);
     }
 
     @Override

@@ -13,4 +13,5 @@ public interface FotoAnimalRepository extends JpaRepository<FotoAnimal, Long> {
 
   Optional<FotoAnimal> findFotoAnimalByNombreInterno(String nombreInterno);
   List<AnimalPublicInfo.FotosAnimalInfo> findAllByAnimalId(Long animalId);
+
 }

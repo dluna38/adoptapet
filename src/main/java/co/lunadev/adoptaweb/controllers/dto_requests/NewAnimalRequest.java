@@ -3,12 +3,10 @@ package co.lunadev.adoptaweb.controllers.dto_requests;
 import co.lunadev.adoptaweb.models.Animal;
 import co.lunadev.adoptaweb.models.HistoriaClinica;
 import co.lunadev.adoptaweb.models.Raza;
-import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.ColumnDefault;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;

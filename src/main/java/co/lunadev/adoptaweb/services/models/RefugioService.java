@@ -56,8 +56,8 @@ public class RefugioService {
 
         System.out.println(animales.get(0).getRefugio());
 
-        List<AnuncioRefugioPublicDto> anuncios = anunciosRefugioService.findAllByRefugioId(
-                refugio.getId(), PageRequest.of(0, 6,
+        List<AnuncioRefugioPublicDto> anuncios = anunciosRefugioService.findAllByRefugioIdPublicado(
+                refugio.getId(),true, PageRequest.of(0, 3,
                         Sort.by(Sort.Direction.DESC, "createdAt"))).map(anuncioRefugioPublicMapper::toDto).toList();
 
         RefugioPublicDto refugioPublicDto = refugioPublicMapper.toDto(refugio);

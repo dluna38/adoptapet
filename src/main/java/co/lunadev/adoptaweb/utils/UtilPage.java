@@ -10,6 +10,10 @@ public class UtilPage {
 
     private UtilPage() {
     }
+    public static PageRequest paramsToPageRequestOnlyPageNumber(int pageSize,Map<String, String> params) {
+        int pageNumber = parseOrDefault(params.get("page"), 0, 0) ;
+        return PageRequest.of(pageNumber, pageSize);
+    }
     public static PageRequest paramsToPageRequest(Map<String, String> params) {
         return paramsToPageRequest(params, DEFAULT_MAX_SIZE_PAGE);
     }
@@ -21,6 +25,7 @@ public class UtilPage {
 
         return PageRequest.of(pageNumber, pageSize);
     }
+
 
     private static int parseOrDefault(String value, int defaultValue, int minValue) {
         return parseOrDefault(value, defaultValue, minValue, Integer.MAX_VALUE);

@@ -58,12 +58,11 @@ public class Animal {
     @ToString.Exclude
     private Raza raza;
 
-    @OneToMany(mappedBy = "animal",cascade = {CascadeType.ALL},fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "animal",cascade = {CascadeType.PERSIST},fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<FotoAnimal> fotos;
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST})
     @JoinColumn()
-    @ToString.Exclude
     private FotoAnimal fotoPortada;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)

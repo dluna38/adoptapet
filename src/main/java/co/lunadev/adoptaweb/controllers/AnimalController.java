@@ -2,6 +2,7 @@ package co.lunadev.adoptaweb.controllers;
 
 import co.lunadev.adoptaweb.controllers.dto_requests.AnimalUpdateDto;
 import co.lunadev.adoptaweb.controllers.dto_requests.NewAnimalRequest;
+import co.lunadev.adoptaweb.controllers.dto_requests.UpdateNewAnimalRequest;
 import co.lunadev.adoptaweb.controllers.response.PageResponse;
 import co.lunadev.adoptaweb.models.User;
 import co.lunadev.adoptaweb.models.dto.AnimalDto;
@@ -53,7 +54,9 @@ public class AnimalController {
     }
     @PutMapping("/{animalId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void editAnimal(@PathVariable Long animalId, @Valid @RequestPart(name = "datos") NewAnimalRequest animal, @AuthenticationPrincipal User user) {
+    public void editAnimal(@PathVariable Long animalId, @Valid @RequestPart(name = "datos") UpdateNewAnimalRequest animal,
+                           @RequestPart(name = "fotos",required = false) List<MultipartFile> fotos,@AuthenticationPrincipal User user) {
+        animal.setFotos(fotos);
         animalService.updateWithNewAnimal(animalId,animal,user);
     }
     @DeleteMapping("/{animalId}")

@@ -15,6 +15,7 @@ import java.util.List;
 @Setter
 @ToString
 @NoArgsConstructor
+@Table(indexes = {@Index(name = "idx_refugio_slug",columnList = "slug")})
 public class Refugio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
